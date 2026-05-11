@@ -11,7 +11,7 @@ A run claiming to encode the Catalan species must produce enough ledgered data t
 1. the Catalan coefficient enumeration;
 2. the branch / monodromy sign;
 3. the gate-loop lift through `Spin(3) -> SO(3)`;
-4. the chamber / Stokes signature under declared normalization.
+4. the chamber / Stokes signature under the committed `A_1` convention.
 
 The test validates the **instance encoding**, not the whole framework. Failure is forensic evidence of encoding drift, implementation drift, or a false normalization assumption.
 
@@ -46,7 +46,9 @@ milnor_generator_id
 gate_trajectory_SO3
 gate_lift_Spin3
 stokes_normalization_id
-stokes_estimate
+stokes_multiplier_observed
+catalan_jump_coefficient_observed
+stokes_error
 hash_chain
 provenance_graph
 ```
@@ -104,23 +106,45 @@ This confirms that the gate trajectory represents the nontrivial element of `pi_
 
 ## 7. Pass condition 4: Stokes / wall-crossing signature
 
-The run must declare a Stokes normalization before evaluation. Stokes constants are convention-dependent, so this spec does not hard-code a universal numeric value until normalization is fixed.
+The committed Stokes convention is:
+
+```text
+A1-sauzin-normalization-v0
+```
+
+defined in:
+
+```text
+docs/conventions/stokes.md
+```
+
+Under this convention, for `t = r > 0`:
+
+```math
+\sqrt{t}_{+}=+\sqrt{r}, \quad \sqrt{t}_{-}=-\sqrt{r}
+```
+
+The hard Stokes / wall-crossing invariant on the `A_1` sign line is:
+
+```math
+S^{mult}_{A_1}=-1
+```
+
+For the Catalan singular part `C_sing(t) = -2 sqrt(t)`, the additive jump is:
+
+```math
+C_{sing,-}-C_{sing,+}=4\sqrt{r}
+```
 
 Required check:
 
 ```text
-stokes_normalization_id is declared
-stokes_estimate is reproducible from the truncated/Borel data under that normalization
-stokes_error <= declared_tolerance
+stokes_normalization_id == A1-sauzin-normalization-v0
+stokes_multiplier_observed == -1
+abs(catalan_jump_coefficient_observed - 4) <= tolerance
 ```
 
-Recommended initial normalization target:
-
-```text
-A1-canonical-normalization-v0
-```
-
-A separate conventions document must define this normalization before CI treats the Stokes check as hard pass/fail.
+This is now a hard pass condition for the `A_1` Catalan test. Higher singularities require their own convention IDs before hard CI checks are enabled.
 
 ## 8. Failure taxonomy
 
@@ -130,20 +154,20 @@ A separate conventions document must define this normalization before CI treats 
 | missing eigendirection | `E_phi` incomplete |
 | eigenvalue not `-1` | branch/monodromy encoding drift |
 | lift does not end at `-I` | gate trajectory not the nontrivial `SO(3)` loop |
-| Stokes non-reproducible | normalization, truncation, or Borel-estimation issue |
+| Stokes multiplier not `-1` | wall-crossing convention or branch encoding failure |
+| Catalan jump coefficient not `4` | singular-part normalization error |
 | hash-chain mismatch | provenance failure |
 
 ## 9. Minimal CI target
 
-The first CI target should implement only deterministic checks:
+The first CI target should implement deterministic checks:
 
 1. coefficient check;
 2. explicit symbolic monodromy for `sqrt(t)`;
 3. synthetic `SO(3)` loop with known `Spin(3)` lift;
-4. hash-chain integrity.
-
-The Stokes check should be marked experimental until normalization is committed.
+4. `A1-sauzin-normalization-v0` Stokes / wall-crossing check;
+5. hash-chain integrity.
 
 ## 10. Nonclaims
 
-Passing this test does not prove P vs NP, validate Lawful Learning, or establish the full bridge. It shows that one forced singular-germ instance can be transported through the declared morphology pipeline without losing its `mu_2` sign.
+Passing this test does not prove P vs NP, validate Lawful Learning, or establish the full bridge. It shows that one forced singular-germ instance can be transported through the declared morphology pipeline without losing its `mu_2` sign or its declared `A_1` wall-crossing signature.
