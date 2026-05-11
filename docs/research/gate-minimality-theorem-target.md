@@ -12,71 +12,103 @@ The `A_1` / square-root singularity naturally produces a two-sheeted branch syst
 singular monodromy -> chi_2 sign -> topological torsion sign -> gate-loop sign
 ```
 
-However, the gate realization is not yet canonical. A sign can be represented in many groups. Without an additional minimality or universality principle, choosing `SO(3)` may be compatible but not forced.
+However, the gate realization is not canonical merely because it displays a sign. A sign can be represented in `U(1)` by the element `-1`. Sign-realization alone selects nothing.
 
-## 2. Why the naive statement is false
+The gate target becomes meaningful only after the Lawful Learning geometry is included.
 
-The statement “`SO(3)` is minimal for representing a sign” is false. A sign is already representable in smaller structures, for example through `U(1)` using `-1`.
+## 2. Corrected admissibility conditions
 
-Therefore the theorem must include the geometry that makes `SO(3)` meaningful for the Lawful Learning framework.
+The admissible target is not merely a group carrying `Z/2`; it is a compact connected Lie gate factor whose action satisfies all of the following:
 
-The admissible target is not merely a group carrying `Z/2`; it is a compact-Lie gate factor that:
+1. **Spatial triad action.** It acts by an orthogonal real 3-dimensional representation on the Lawful Learning spatial triad.
+2. **Non-abelian active-set action.** Its induced action on the active constraint set is non-abelian. This preserves the abelian/non-abelian species bifurcation.
+3. **Connected compact Lie regularity.** The group is compact, connected, and Lie, so the monodromy representation is controlled by standard differential topology.
+4. **Nontrivial fundamental group.** Its fundamental group contains the required `Z/2` loop class for the half-integer branch sign.
+5. **Polarization compatibility.** The action preserves the pairing and filtration transported from the `A_1` singular germ by the encoding map `E_phi`.
 
-1. acts on the spatial triad used by the Lawful Learning geometry;
-2. admits a nontrivial double-cover lift with central sign;
-3. supports a faithful equivariant action on the distinguished `A_1` monodromy eigendirection;
-4. composes with the existing torus phase gates `T^k`;
-5. preserves the constraint-complex polarization required by the encoding map `E_phi`.
+Condition 5 is the load-bearing canonicity condition. Conditions 1–4 force the correct Lie-theoretic arena; condition 5 prevents arbitrary conjugation or representation substitution from changing the bridge.
 
-## 3. Candidate theorem statement
+## 3. Why `U(1)` is excluded
 
-### Gate minimality conjecture, half-integer case
+`U(1)` can represent a sign, and it can act faithfully on a real 3-dimensional space as a rotation plane plus a fixed axis. Therefore it is incorrect to exclude `U(1)` by sign-realization or by bare 3-dimensional representability.
 
-Let `C` be the category of compact connected Lie gate factors `H` equipped with:
+`U(1)` is excluded because it is abelian and cannot supply the non-abelian active-set action required by the species bifurcation. It also cannot be the minimal non-abelian compact connected gate factor compatible with the spatial-triad bridge.
 
-- a faithful real representation `rho: H -> SO(3)` on the Lawful Learning spatial triad;
-- a connected double cover `\tilde H -> H` whose kernel contains a central element acting as `-1` on the distinguished lifted eigendirection;
-- an equivariant action on the `A_1` Milnor cohomology sign representation, compatible with `E_phi`.
+## 4. Lie-theoretic reduction
 
-Then `SO(3)`, with double cover `Spin(3) = SU(2)`, is terminal-minimal in `C` among non-abelian compact connected Lie gate factors realizing the half-integer monodromy sign.
+Once a faithful orthogonal 3-dimensional gate action is required, the image of the gate factor is a connected compact subgroup of `SO(3)`.
 
-## 4. What must be proved
+The connected compact subgroups of `SO(3)` relevant here are:
 
-The proof should split into four checks.
+```text
+SO(2)      abelian
+SO(3)      non-abelian
+```
 
-### Check 1: representation admissibility
+Thus a compact connected Lie group acting faithfully and non-abelianly on the triad must have image `SO(3)`. If the representation is faithful, the group itself is isomorphic to `SO(3)`.
 
-Show that the spatial-triad requirement forces the target representation to land in or factor through `SO(3)`.
+This is the clean reason the corrected theorem is attackable: the classical Lie-theoretic part is short. The new work is proving that the representation and pairing are forced by the encoding `E_phi`.
 
-### Check 2: double-cover sign
+## 5. Candidate theorem statement
 
-Show that the nontrivial loop in `SO(3)` lifts to a path in `Spin(3)` ending at the nontrivial central element `-I`, and that this central element realizes the `A_1` sign on the distinguished eigendirection.
+### Gate minimality theorem target, `A_1` case
 
-### Check 3: exclusion of abelian-only targets
+Let `C_{A1}` be the class of compact connected Lie gate factors `H` equipped with:
 
-Show that `U(1)` or finite cyclic targets can represent the sign but fail the full admissibility package: spatial-triad action, non-abelian active-set action, and Lawful Learning polarization compatibility.
+- a faithful orthogonal real 3-dimensional representation on the Lawful Learning spatial triad;
+- a non-abelian induced action on the active constraint set;
+- a nontrivial `Z/2` loop class realizing the half-integer branch sign;
+- a polarization-compatible encoding `E_phi` of the `A_1` singular germ into the active constraint complex.
 
-### Check 4: minimality inside the admissible class
+Then `SO(3)`, with double cover `Spin(3)=SU(2)`, is the uniquely minimal object of `C_{A1}` for the half-integer `mu_2` bridge.
 
-Show that any admissible compact connected non-abelian gate factor for the spatial triad either factors through `SO(3)` or contains redundant structure relative to the `A_1` sign realization.
+More concretely: any object in `C_{A1}` has triad image `SO(3)`; if the triad representation is faithful, the object is isomorphic to `SO(3)`. Additional group structure is redundant for the `A_1` sign bridge.
 
-## 5. Expected conclusion
+## 6. Proof plan
+
+### Step 1: force the triad image
+
+Show that a faithful orthogonal 3-dimensional action identifies `H` with a connected compact subgroup of `SO(3)`.
+
+### Step 2: exclude abelian images
+
+Show that connected proper compact subgroups of `SO(3)` are abelian circle-type subgroups. These cannot satisfy the non-abelian active-set action requirement.
+
+### Step 3: recover `SO(3)`
+
+Conclude that the triad image must be all of `SO(3)`. With faithful representation, `H ≅ SO(3)`.
+
+### Step 4: attach the `mu_2` lift
+
+Show that the nontrivial loop in `SO(3)` lifts through `Spin(3)=SU(2)` to a path ending at `-I`, realizing the `A_1` sign on the distinguished lifted eigendirection.
+
+### Step 5: prove polarization compatibility
+
+Use the pairing transported by `E_phi` to show that the identified eigendirection and action are fixed before execution, not selected after seeing the result.
+
+## 7. Expected conclusion
 
 If proved, the result does not prove P vs NP, Lawful Learning, or the proof-character program. It proves something narrower but important:
 
 ```text
-for the half-integer singular-germ bridge, SO(3)/Spin(3) is not an arbitrary decorative gate choice; it is the minimal non-abelian compact-Lie realization compatible with the Lawful Learning spatial triad and the A_1 sign monodromy.
+for the half-integer singular-germ bridge, SO(3)/Spin(3) is not an arbitrary decorative gate choice; it is the minimal non-abelian compact-Lie realization compatible with the Lawful Learning spatial triad, polarization compatibility, and the A_1 sign monodromy.
 ```
 
 That would close the canonicity gap for the first bridge instance.
 
-## 6. Open risks
+## 8. Open risks
 
-1. The admissible category `C` may be too narrowly defined and therefore theorem becomes tautological.
-2. If the spatial-triad requirement is weakened, `SO(3)` will not be minimal.
-3. If the active-set action does not require non-abelian structure, abelian sign targets compete.
-4. The proof depends on the precise Lawful Learning geometry, so this theorem must be versioned against the committed gate model.
+1. If the spatial-triad requirement is weakened, `SO(3)` will not be minimal.
+2. If non-abelian active-set action is removed, abelian sign targets such as `U(1)` compete.
+3. If polarization compatibility is too narrowly defined, the theorem becomes tautological.
+4. The proof depends on the precise Lawful Learning gate geometry, so this theorem must be versioned against the committed gate model.
 
-## 7. Required next artifact
+## 9. Required next artifact
 
-A formal version of `C` with objects, morphisms, and admissibility constraints. This should be written before any proof attempt.
+The polarization compatibility condition is now specified separately in:
+
+```text
+docs/research/polarization-compatibility.md
+```
+
+The next artifact is a proof note for Steps 1–4 above, treating Step 5 as an assumption imported from the polarization compatibility document.
