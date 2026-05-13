@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.github.io/np-program/schemas/singularity-scope.schema.json",
+  "title": "Singularity Scope Declaration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "singularity_class",
+    "local_coordinate",
+    "is_isolated",
+    "is_algebraic",
+    "has_branching",
+    "has_log_terms",
+    "has_irregular_terms",
+    "monodromy_model",
+    "stokes_model",
+    "finite_part_model",
+    "scope_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "singularity-scope/v0"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "singularity_class": {
+      "type": "string",
+      "enum": [
+        "algebraic_isolated_A1",
+        "algebraic_isolated_Ak",
+        "algebraic_isolated_Dk",
+        "algebraic_isolated_Ek",
+        "algebraic_logarithmic",
+        "d_finite_regular",
+        "d_finite_irregular",
+        "rational_poles_only",
+        "transcendental_essential",
+        "natural_boundary",
+        "unknown"
+      ]
+    },
+    "local_coordinate": {
+      "type": "string",
+      "minLength": 1
+    },
+    "is_isolated": {
+      "type": "boolean"
+    },
+    "is_algebraic": {
+      "type": "boolean"
+    },
+    "has_branching": {
+      "type": "boolean"
+    },
+    "has_log_terms": {
+      "type": "boolean"
+    },
+    "has_irregular_terms": {
+      "type": "boolean"
+    },
+    "monodromy_model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stokes_model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "finite_part_model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope_status": {
+      "type": "string",
+      "enum": [
+        "base_scope",
+        "in_scope_with_unipotent_register",
+        "boundary_case_by_case",
+        "extension_scope",
+        "finite_defect_only",
+        "out_of_base_scope"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
