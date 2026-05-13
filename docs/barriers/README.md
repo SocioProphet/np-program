@@ -302,6 +302,53 @@ references:
   - docs/research/polarization-compatibility.md
 ```
 
+### A1-POLARIZATION-DESIGN-INTENT-001
+
+```yaml
+claim_id: A1-POLARIZATION-DESIGN-INTENT-001
+claim_type: heuristic
+basis: A_1 singular-germ bridge, Catalan mu2 fixture, and active morphology coordinates
+stage: candidate_found
+barriers:
+  relativization: unknown
+  natural_proofs: unknown
+  algebrization: unknown
+  proof_complexity_transfer: unknown
+  average_case_transfer: unknown
+positions:
+  relativization: >
+    Track A1 is not designed as an oracle-uniform diagonalization or simulation
+    argument. It uses monodromy, transported pairings, and filtration data attached
+    to a declared algebraic family. That is a design reason it is not obviously
+    relativizing, not a proof that relativization has been escaped.
+  natural_proofs: >
+    Track A1 does not currently define a large constructive property of Boolean
+    functions. If a future bridge turns the transported invariant into a Boolean
+    function property, the property must be classified for constructivity and
+    largeness before any lower-bound interpretation.
+  algebrization: >
+    Track A1 is intended to depend on geometric/topological structure of specific
+    algebraic families, including monodromy around discriminant loci, pairing
+    transport, and filtration preservation. The hope is that this is not merely
+    a low-degree oracle extension or arithmetized black-box computation. This is
+    the highest-risk barrier and remains uncleared.
+  proof_complexity_transfer: >
+    Track A1 has not yet connected its preserved pairing to proof-system size,
+    width, depth, space, substitution cost, or simulation cost. Such a connection
+    requires a separate transfer theorem or restricted-system result.
+  average_case_transfer: >
+    Track A1 is not distributional evidence. Any future average-case or
+    meta-complexity use requires a declared input distribution, tranche, null
+    model, and transfer statement before observing the result.
+notes: >
+  This entry records design intent only. It exists to prevent accidental inflation
+  from 'not obviously blocked' to 'barrier cleared'. No Clay-proximity promotion
+  follows from this entry.
+references:
+  - docs/foundations/polarization.md
+  - docs/roadmap/clay-track-program-structure.md
+```
+
 ### GATE-MINIMALITY-001
 
 ```yaml

@@ -2,7 +2,7 @@
 
 Status: **theorem-input foundation / Track A1 / not a Clay claim**.  
 Date: 2026-05-12.  
-Depends on: `docs/research/polarization-compatibility.md`, `docs/research/gate-minimality-theorem-target.md`, `specs/catalan-mu2-reference-implementation.md`.
+Depends on: `docs/research/polarization-compatibility.md`, `docs/research/gate-minimality-theorem-target.md`, `specs/catalan-mu2-reference-implementation.md`, `docs/barriers/README.md`.
 
 ## 0. Purpose
 
@@ -222,7 +222,40 @@ for the gate action used in the replay.
 
 The implementation report must make this machine-checkable by emitting basis indices or projection matrices for each filtration level.
 
-## 7. The A1 / Catalan specialization
+## 7. Complexity-theoretic interpretation of `E_phi`
+
+The role of `E_phi` is not to prove a lower bound. Its role is to prevent a singular-germ invariant from becoming detached from the declared computational basis.
+
+The intended complexity-theoretic interpretation is:
+
+```text
+source side:      algebraic / singular-germ invariant
+active side:      declared proof, formula, circuit, or constraint morphology basis
+E_phi:            typed transport map from source invariant into active morphology coordinates
+Q preservation:   no loss or post-hoc rotation of the invariant under the transport
+filtration:       declared hierarchy of cost, depth, width, activity, or basis-change levels
+```
+
+For the Catalan `A1` instance, the combinatorial side is deliberately modest. Catalan coefficients enumerate binary-tree and parenthesization structures that can serve as formula-shape or parse-shape corpora. The square-root singularity supplies a one-dimensional sign-line invariant. The map `E_phi` says where that sign-line invariant lives in the active constraint coordinates before any gate trajectory or monodromy computation is evaluated.
+
+Thus:
+
+- nondegeneracy of the transported pairing means the source invariant did not collapse under encoding;
+- monodromy compatibility means the active-side trajectory realizes the declared source monodromy rather than a post-selected sign;
+- filtration preservation means the bridge has not silently moved data across declared complexity levels;
+- deterministic replay means the bridge is an auditable artifact rather than an interpretation after the fact.
+
+What this could mean for complexity theory is conditional. A future Track B or Track C result would need to prove that a preserved pairing or filtration corresponds to a known proof-complexity or circuit-complexity quantity such as proof size, formula depth, width, simulation cost, substitution cost, or orbit-closure obstruction data.
+
+Until such a transfer theorem or restricted-system theorem exists, `E_phi` has only the following status:
+
+```text
+well-typed invariant transport, not lower bound evidence
+```
+
+This is why the bridge is useful but not yet Clay-proximate. It creates a place where a complexity interpretation can be tested without claiming that the interpretation has already succeeded.
+
+## 8. The A1 / Catalan specialization
 
 The first test instance is intentionally small.
 
@@ -259,7 +292,7 @@ filtration_preservation_report == pass
 
 The expected theorem value of this specialization is narrow: it supports the gate-minimality proof note by preventing arbitrary sign-realizing representations from being substituted after the fact.
 
-## 8. Replay schema
+## 9. Replay schema
 
 Every replay artifact claiming polarization compatibility must emit:
 
@@ -303,7 +336,7 @@ provenance:
 
 No paid runtime is required for this stage. A doctrine-only or synthetic-fixture artifact is valid if it accurately declares `execution_status` and does not pretend to be a runtime certificate.
 
-## 9. Pass / fail policy
+## 10. Pass / fail policy
 
 A replay passes A1 only if:
 
@@ -327,7 +360,7 @@ A replay fails if any of the following occurs:
 - convention hashes are missing;
 - the artifact claims theorem status while only supplying a fixture.
 
-## 10. Relation to the gate-minimality theorem
+## 11. Relation to the gate-minimality theorem
 
 This note supplies the fifth condition in the gate-minimality theorem target.
 
@@ -339,7 +372,54 @@ The theorem may cite this note as the definition of a polarization-compatible `A
 4. the nontrivial loop lifts through `Spin(3)=SU(2)` to realize the half-integer sign;
 5. the sign direction is fixed by the transported pairing and encoding, not post-selected.
 
-## 11. Nonclaims
+## 12. Barrier applicability design intent
+
+This section records design intent only. It does not mark any barrier as cleared. Barrier status remains governed by `docs/barriers/README.md`.
+
+```yaml
+barrier_position:
+  relativization:
+    status: design_intent_not_cleared
+    position: >
+      Track A1 is not an oracle-uniform simulation or diagonalization argument.
+      It depends on monodromy, pairing transport, and filtration data for a declared
+      algebraic family. That is the intended reason it is not obviously a
+      relativizing technique. A later lower-bound claim must still prove that the
+      relevant invariant distinguishes the unrelativized setting from oracle variants.
+  natural_proofs:
+    status: design_intent_not_cleared
+    position: >
+      Track A1 does not currently define a large constructive property of Boolean
+      functions. It defines transport of a singular-germ invariant into an active
+      morphology basis. If this transport is later converted into a Boolean-function
+      property or circuit lower-bound property, that property must be classified for
+      constructivity and largeness before promotion.
+  algebrization:
+    status: design_intent_not_cleared
+    position: >
+      Track A1 is designed to use geometric and topological data tied to specific
+      algebraic families, including monodromy around discriminant loci, transported
+      pairings, and filtration preservation. The intended non-algebrizing hope is
+      that these are not merely low-degree oracle extensions or arithmetized
+      black-box computations. This is not established and is the most important
+      barrier question for the approach.
+  proof_complexity_transfer:
+    status: design_intent_not_cleared
+    position: >
+      Track A1 does not yet connect the transported pairing to proof-system size,
+      width, depth, space, or simulation cost. Any proof-complexity claim requires
+      a declared proof basis B, a translation morphism when comparing bases, and a
+      theorem explaining what the preserved invariant measures.
+  average_case_meta_complexity_transfer:
+    status: design_intent_not_cleared
+    position: >
+      Track A1 is not distributional evidence. If renormalized defect or pairing
+      preservation is later used for average-case or meta-complexity claims, the
+      input distribution, tranche, null model, and transfer statement must be
+      declared before observing the result.
+```
+
+## 13. Nonclaims
 
 This file does not claim:
 
@@ -350,6 +430,7 @@ This file does not claim:
 - a proof-system lower bound;
 - a GCT obstruction;
 - that every proof-character generating function admits a polarization-compatible singular-germ encoding;
-- that `SO(3)` is forced without the Lawful Learning spatial-triad and non-abelian active-set assumptions.
+- that `SO(3)` is forced without the Lawful Learning spatial-triad and non-abelian active-set assumptions;
+- that Track A1 has cleared relativization, natural-proofs, algebrization, proof-complexity-transfer, or average-case/meta-complexity barriers.
 
 It is a foundation note for Track A1 only.
