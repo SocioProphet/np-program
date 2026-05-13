@@ -1,3 +1,4 @@
+from copy import deepcopy
 from pathlib import Path
 import json
 import sys
@@ -35,3 +36,36 @@ def test_stokes_convention_hard_check():
     assert stokes["stokes_normalization_id"] == "A1-sauzin-normalization-v0"
     assert stokes["stokes_multiplier_observed"] == -1
     assert stokes["catalan_jump_coefficient_observed"] == 4
+
+
+def test_negative_monodromy_fixture_fails():
+    ledger = h.build_ledger(N=2)
+    bad = deepcopy(ledger)
+    bad["sections"]["monodromy"]["distinguished_eigenvalue"] = 1
+    errors = h.validate_ledger(bad)
+    assert "distinguished monodromy eigenvalue is not -1" in errors
+
+
+def test_negative_spin_endpoint_fixture_fails():
+    ledger = h.build_ledger(N=2)
+    bad = deepcopy(ledger)
+    bad["sections"]["spin_lift"]["endpoint_error"] = 1.0
+    errors = h.validate_ledger(bad)
+    assert "Spin lift endpoint is not -I within tolerance" in errors
+
+
+def test_negative_stokes_fixture_fails():
+    ledger = h.build_ledger(N=2)
+    bad = deepcopy(ledger)
+    bad["sections"]["stokes"]["stokes_multiplier_observed"] = 1
+    errors = h.validate_ledger(bad)
+    assert "Stokes multiplier is not -1" in errors
+
+
+def test_negative_hash_chain_fixture_fails():
+    ledger = h.build_ledger(N=2)
+    bad = deepcopy(ledger)
+    bad["sections"]["coefficients"]["values"][0] = 999
+    errors = h.validate_ledger(bad)
+    assert "coefficient mismatch" in errors
+    assert "hash_chain mismatch" in errors
