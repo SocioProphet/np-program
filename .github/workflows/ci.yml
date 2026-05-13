@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run standard-library tests
+        run: python -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Emit Catalan mu2 reference ledger
+        run: python experiments/catalan_mu2_reference.py > catalan-mu2-ledger.json
+
+      - name: Upload Catalan mu2 ledger
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalan-mu2-ledger
+          path: catalan-mu2-ledger.json
