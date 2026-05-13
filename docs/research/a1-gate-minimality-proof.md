@@ -1,58 +1,92 @@
-# `A_1` Gate Minimality Proof Note
+# `A_1` Spin-Polarized Gate Minimality Proof Note
 
 Status: **proof note / conditional theorem**.
 
-This note proves the Lie-theoretic part of the `A_1` gate-minimality target, conditional on the polarization compatibility contract in `docs/research/polarization-compatibility.md` and the committed Lawful Learning spatial-triad model.
+This note refines the `A_1` gate-minimality target by separating two statements that were previously conflated:
 
-It does not prove P vs NP, does not validate Lawful Learning, and does not establish the bridge for arbitrary proof-class generating functions.
+1. **Admissibility:** what a gate object must carry to realize the `A_1` bridge semantics;
+2. **Minimality:** what the smallest spin-polarized object is once those structures are required.
 
-## 1. Setup
+The correction is important: `U(1)` can represent `-1`, so sign-realization alone selects nothing. The theorem is about the structural role: spatial-triad action, non-abelian active-set action, `SO(3)` loop class, `Spin(3)` lift, and polarization compatibility.
 
-Let `T_phi` be a proof-class generating function whose local singular germ is of square-root / `A_1` type. The branch system is two-sheeted, and the bridge-relevant reduced cohomology contains a one-dimensional sign line `L_phi` on which the generator of local monodromy acts by `-1`.
+This note does not prove P vs NP, does not validate Lawful Learning, and does not establish the bridge for arbitrary proof-class generating functions.
 
-Let `V_sp ≅ R^3` be the Lawful Learning spatial triad. Let `H` be a compact connected Lie gate factor equipped with an orthogonal real representation
+## 1. Source object: the `A_1` germ
 
-```math
-\rho: H \longrightarrow SO(V_{sp}) \cong SO(3).
-```
+Let `T_phi` be a proof-class generating function whose local singular germ is square-root / `A_1` type. The branch system is two-sheeted, and local continuation around the branch point swaps sheets. On the reduced sign line `L_phi`, monodromy acts by `-1`.
 
-The admissibility package for the `A_1` bridge is:
-
-1. `rho` is faithful on the gate factor under consideration;
-2. the induced active-set action is non-abelian;
-3. the gate factor is compact, connected, and Lie;
-4. the gate trajectory contains the nontrivial `Z/2` loop class required by the half-integer branch sign;
-5. the encoding `E_phi` is polarization-compatible: the transported pairing and filtration are preserved and the sign eigendirection is fixed before execution.
-
-The theorem below proves that these assumptions force the triad gate factor to be `SO(3)`.
-
-## 2. Theorem
-
-### Theorem: `A_1` triad gate minimality
-
-Under the admissibility package above, any compact connected Lie gate factor acting faithfully and orthogonally on the Lawful Learning spatial triad with non-abelian active-set action has triad image `SO(3)`. If the triad representation is faithful, then the gate factor is isomorphic to `SO(3)`.
-
-Moreover, the nontrivial loop in `SO(3)` lifts through
+For the spin-polarized bridge we distinguish:
 
 ```text
-Spin(3) = SU(2) -> SO(3)
+L_phi          one-dimensional reduced sign line
+B_phi          two-dimensional branch-state module carrying the two sheets
+Q_phi^spin     skew/symplectic pairing on the lifted branch-state module
 ```
 
-to a path starting at `I` and ending at `-I`, realizing the `A_1` monodromy sign on the distinguished lifted eigendirection specified by `E_phi`.
+The one-dimensional sign line records the `mu_2` monodromy. The two-dimensional branch-state module is the lifted space on which the spin/polarization semantics live. This prevents the proof from pretending that the reduced `A_1` cohomology line is itself a two-dimensional symplectic space.
 
-## 3. Proof
+## 2. Gate object
 
-### Step 1: the triad image is a connected compact subgroup of `SO(3)`
+A spin-polarized gate object for the `A_1` bridge consists of:
 
-Because `H` is compact and connected and `rho` is continuous, `rho(H)` is a compact connected Lie subgroup of `SO(3)`. Because `rho` is orthogonal on the triad, the image lies in `SO(3)` after fixing the orientation convention for the spatial triad.
+```text
+\tilde G ----p----> G_sp ----rho_sp----> SO(V_sp) ≅ SO(3)
+        \                         
+         \--rho_spin--> Sp(B_A, Q_A)
+```
 
-If the original representation lands in `O(3)`, connectedness forces the determinant sign to be constant. Since the identity has determinant `+1`, the entire image lies in `SO(3)`.
+where:
 
-### Step 2: proper connected compact subgroups of `SO(3)` are abelian
+- `V_sp ≅ R^3` is the Lawful Learning spatial triad;
+- `G_sp` is the spatial rotation image;
+- `\tilde G` is a compact connected Lie lift carrying the central sign;
+- `rho_spin` acts on the lifted active branch module `B_A ≅ C^2`;
+- `Q_A` is the transported symplectic pairing;
+- `E_phi` identifies `B_phi` and its sign line with the corresponding active data before execution.
 
-The Lie algebra of a connected Lie subgroup of `SO(3)` is a Lie subalgebra of `so(3)`. The nonzero proper Lie subalgebras of `so(3)` are one-dimensional. Each one-dimensional Lie algebra is abelian, and its connected subgroup is conjugate to a circle rotation subgroup `SO(2)` inside `SO(3)`.
+The triad action may be faithful for `G_sp`; it is not required to be faithful for `\tilde G`. This is necessary because `SU(2) -> SO(3)` has kernel `{±I}`, and the central element `-I` must remain visible on the spin/polarization side even though the triad quotient cannot see it.
 
-Thus a connected compact subgroup of `SO(3)` is one of:
+## 3. T1 — Admissibility
+
+### Theorem T1: admissibility package
+
+Any gate object realizing the `A_1` spin-polarized semantics must supply the following structures:
+
+1. **Connected compact Lie regularity:** the relevant gate factors are compact connected Lie groups.
+2. **Spatial-triad action:** the object induces a nontrivial orthogonal action on the Lawful Learning spatial triad.
+3. **Non-abelian active-set action:** the active branch/constraint action is non-abelian, preserving the abelian/non-abelian species distinction.
+4. **Distinguished `Z/2` rotation loop:** the spatial image carries the nontrivial class in `pi_1(SO(3))` corresponding to the half-integer branch sign.
+5. **Spin lift:** the nontrivial spatial loop lifts to a central element acting as `-id` on the lifted active branch module.
+6. **Polarization compatibility:** the lifted action preserves the transported pairing `Q_A` and commutes with the encoding `E_phi`.
+
+T1 is a specification theorem: it says what data an admissible instance must exhibit. It does not by itself select the minimal group.
+
+## 4. T2 — Minimality, assuming polarization compatibility
+
+### Theorem T2: `A_1` spin-polarized minimality
+
+Assume the admissibility package T1 and the polarization compatibility contract in `docs/research/polarization-compatibility.md`. Then the minimal spin-polarized gate object is:
+
+```text
+SU(2) = Spin(3) ----2:1----> SO(3)
+```
+
+with:
+
+- `SO(3)` acting on the spatial triad by the standard vector representation;
+- `SU(2)` acting on the lifted branch module `C^2` by the standard spin representation;
+- the central element `-I ∈ SU(2)` acting as `-id` on the lifted active branch module;
+- the quotient loop in `SO(3)` representing the nontrivial element of `pi_1(SO(3)) ≅ Z/2`.
+
+Equivalently: the spatial image forced by non-abelian triad semantics is `SO(3)`, but the polarization-visible minimal object is its spin cover `SU(2)`.
+
+## 5. Proof of T2
+
+### Step 1: reduce the spatial image
+
+Let the spatial action have image in `O(3)`. Since the gate factor is connected, the determinant is constant, and because the identity has determinant `+1`, the image lies in `SO(3)`.
+
+The connected compact subgroups of `SO(3)` are, up to conjugacy:
 
 ```text
 trivial group,
@@ -60,89 +94,99 @@ SO(2)-type circle subgroup,
 SO(3).
 ```
 
-The first two are abelian. Therefore any connected compact subgroup of `SO(3)` whose induced action must support non-abelian active-set behavior must have image `SO(3)`.
+The proper connected subgroups are abelian. Therefore a non-abelian spatial/active realization cannot have a proper connected spatial image. The spatial image is `SO(3)`.
 
-### Step 3: faithful triad action identifies the gate factor
+### Step 2: distinguish spatial quotient from spin lift
 
-Since `rho(H)=SO(3)` and `rho` is faithful on the gate factor, `rho` is an isomorphism of compact connected Lie groups from `H` onto `SO(3)`.
-
-Therefore `H ≅ SO(3)`.
-
-This proves uniqueness/minimality in the admissible triad category: any additional compact connected Lie structure either fails faithfulness on the triad factor or is redundant relative to the `A_1` bridge.
-
-### Step 4: the `Spin(3)` lift gives the sign
-
-The universal double cover of `SO(3)` is
+The triad action sees `SO(3)`. It does not see the central `-I` element because that element lives in the double cover:
 
 ```text
-Spin(3) = SU(2) -> SO(3),
+Spin(3)=SU(2) -> SO(3).
 ```
 
-with kernel `{+I, -I}`. The nontrivial loop class in
+Thus a theorem stated only in terms of a faithful triad action selects `SO(3)`, while a theorem stated in terms of a polarization-visible spin action selects the pair `SU(2) -> SO(3)`.
+
+This is the correction to the earlier proof note.
+
+### Step 3: the polarization condition selects `SU(2)`
+
+The lifted active branch module is two-dimensional complex symplectic data. The standard compact group preserving this spinor/polarization structure is:
 
 ```text
-pi_1(SO(3)) ≅ Z/2
+Sp(1) = SU(2).
 ```
 
-lifts to a path in `SU(2)` beginning at `I` and ending at `-I`. The endpoint `-I` is the nontrivial central element and acts as multiplication by `-1` on the distinguished lifted sign line.
+The group `SO(3)` acts faithfully on the real triad, but it does not act faithfully on the two-dimensional spinor module. Its action appears only after projectivizing / quotienting the spin representation, where the central element `-I` becomes invisible.
 
-By polarization compatibility, that sign line is not selected after the computation. It is the image under `E_phi` of the `A_1` monodromy line `L_phi`. Thus the gate-side sign is the transported singular-germ sign.
+Therefore the polarization-visible realization of the `A_1` sign requires the spin cover. The central element `-I ∈ SU(2)` acts as `-id` on `C^2`, giving the concrete group element that realizes the `A_1` sign.
 
-### Step 5: exclusion of `U(1)` and other abelian sign carriers
+### Step 4: verify `SU(2) -> SO(3)` is admissible
 
-`U(1)` can represent the number `-1`, and it can act on a real three-dimensional space as a rotation plane plus a fixed axis. This is why sign-realization alone is insufficient.
+The object `SU(2) -> SO(3)` satisfies T1:
 
-However, any such `U(1)` action is abelian. It cannot satisfy the non-abelian active-set action required by the species bifurcation. It also cannot be the uniquely minimal non-abelian triad gate factor. Therefore `U(1)` is excluded by the admissibility package, not by inability to display a sign.
+- compact connected Lie: yes;
+- spatial triad action: through the adjoint/vector quotient `SU(2) -> SO(3)`;
+- non-abelian active action: standard `SU(2)` action on `C^2` is non-abelian;
+- distinguished `Z/2` loop: the nontrivial loop in `SO(3)` is the quotient loop;
+- spin lift: the lifted endpoint is central `-I ∈ SU(2)`;
+- polarization compatibility: by assumption, the standard symplectic pairing on the lifted active module is the transported `Q_A`.
 
-This completes the proof. `□`
+### Step 5: minimality
 
-## 4. What is proved
+Any admissible object must have spatial image `SO(3)` by Step 1. Any polarization-visible lift of the nontrivial loop must retain the central sign that the spatial quotient forgets. The minimal compact connected Lie cover of `SO(3)` carrying that central sign is `Spin(3)=SU(2)`.
 
-The proof establishes:
+A proper closed connected subgroup of `SU(2)` is abelian, conjugate to a maximal torus `U(1)`, and fails the non-abelian active-set condition. Higher-dimensional compact connected groups may contain or map onto the required `SU(2)` structure, but they add redundant degrees of freedom relative to the `A_1` sign bridge.
+
+Thus the minimal spin-polarized object is the pair:
 
 ```text
-Within the committed Lawful Learning spatial-triad admissible class, the half-integer / A_1 mu_2 bridge forces SO(3) as the minimal non-abelian compact connected gate factor, and Spin(3) supplies the canonical lifted sign.
+SU(2) -> SO(3).
 ```
 
-This closes the first Lie-theoretic part of the canonicity gap.
+This completes the conditional proof. `□`
 
-## 5. What remains conditional
+## 6. Counterexamples when conditions are removed
 
-The proof still depends on the following external commitments:
+| Removed condition | Counterexample | Why it shows the condition is necessary |
+|---|---|---|
+| Non-abelian active-set action | `U(1)` | Contains `-1` and can rotate a plane, but is abelian. |
+| Polarization / spin visibility | `SO(3)` alone | Has the `Z/2` loop class but not the central `-I` acting on the spinor module. |
+| Connected compact Lie regularity | abstract `Z/2` | Has a sign but no controlled Lie monodromy or triad geometry. |
+| `Z/2` loop / spin lift | higher groups without chosen lift | Non-abelian structure alone does not identify the half-integer branch sign. |
+| Symplectic polarization | orthogonal-only model | The minimal object may revert to `SO(3)` or another orthogonal group. |
 
-1. The Lawful Learning model really commits to a spatial triad.
-2. The active-set action must be non-abelian for the non-abelian species lane.
-3. The encoding `E_phi` must be supplied and ledgered for each instance.
-4. Polarization compatibility must hold for the claimed encoding.
-5. The proof-class generating function must be in the scoped singularity class, presently algebraic isolated singularities for the base theory.
+## 7. Interaction with the Catalan harness
 
-## 6. Implementation consequences
+The Catalan harness verifies an **instance** of the theorem target. It does not independently prove T2.
 
-A Catalan `mu_2` run must not merely output a matrix with eigenvalue `-1`. It must also provide:
+The contract is:
 
 ```text
-E_phi_matrix
-source_pairing_gram_matrix
-active_constraint_pairing_gram_matrix
-monodromy_matrix_source
-monodromy_matrix_gate
-commutator_norm
-pairing_preservation_error
-filtration_preservation_report
-Spin_lift_start
-Spin_lift_end
+T2 proves: polarization-compatible A_1 bridge -> minimal spin object SU(2)->SO(3).
+Catalan harness verifies: Catalan carries the A_1 sign and the run instantiates the declared spin lift.
 ```
 
-The sign passes only when the eigendirection is specified by `E_phi` and the gate loop lifts from `I` to `-I`.
+The Stokes-side checks verify the abstract `Z/2` branch data. The Spin-lift and polarization checks verify that the run realizes that data through the minimal spin-polarized object.
 
-## 7. Nonclaims
+## 8. What remains conditional
+
+The proof depends on:
+
+1. the Lawful Learning spatial triad being part of the committed model;
+2. non-abelian active-set action being required for the non-abelian species lane;
+3. `E_phi` being supplied and ledgered;
+4. polarization compatibility holding for the claimed encoding;
+5. the singularity being in the scoped base class: algebraic isolated `A_1` for this theorem.
+
+## 9. Nonclaims
 
 This theorem does not apply if:
 
 - the spatial triad is removed;
-- non-abelian active-set action is not required;
-- the group is allowed to be disconnected or non-Lie without additional hypotheses;
-- the singularity is outside the declared algebraic isolated scope;
+- the active action is allowed to be abelian;
+- the polarization is orthogonal rather than spin/symplectic;
+- the group is allowed to be disconnected or non-Lie without a replacement theory;
+- the singularity is outside the declared algebraic isolated `A_1` scope;
 - polarization compatibility is not established.
 
 It does not imply any complexity-theoretic lower bound or any P vs NP result.
