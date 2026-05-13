@@ -1,0 +1,355 @@
+# Polarization Foundation for the A1 / mu2 Bridge
+
+Status: **theorem-input foundation / Track A1 / not a Clay claim**.  
+Date: 2026-05-12.  
+Depends on: `docs/research/polarization-compatibility.md`, `docs/research/gate-minimality-theorem-target.md`, `specs/catalan-mu2-reference-implementation.md`.
+
+## 0. Purpose
+
+This note supplies the formal foundation that the gate-minimality theorem needs. It upgrades polarization compatibility from a roadmap condition into a citeable definition package for the `A1` / Catalan / `mu2` bridge.
+
+It does not prove P vs NP, does not assert a Boolean lower bound, and does not claim that singular-germ invariants transfer to proof complexity. It only defines the source pairing, active-constraint pairing, encoding map, and preservation checks required before the `SO(3)` / `Spin(3)` gate-minimality target can be treated as mathematical rather than decorative.
+
+## 1. Objects
+
+### 1.1 Source singular-germ data
+
+Let `phi` be a declared algebraic isolated singular germ in the active scope of the repository. For the first bridge instance, `phi` is the `A1` square-root / two-sheeted branch germ.
+
+The source package is:
+
+```text
+S_phi = (
+  F_phi,
+  H_phi,
+  T_phi,
+  W_phi,
+  Filt_phi,
+  Q_phi,
+  conventions_phi,
+  provenance_phi
+)
+```
+
+where:
+
+- `F_phi` is the Milnor fiber or declared equivalent branch fiber;
+- `H_phi` is the bridge-relevant cohomology or reduced cohomology subspace;
+- `T_phi` is the monodromy action on `H_phi`;
+- `W_phi` is the relevant weight or monodromy filtration;
+- `Filt_phi` records any additional filtration used by the bridge;
+- `Q_phi` is the source pairing, normalized under the committed convention;
+- `conventions_phi` records branch, sign, Stokes, and normalization choices;
+- `provenance_phi` records source text, code, commit, and hash data.
+
+For `A1`, the bridge-relevant source subspace is the sign line:
+
+```text
+L_phi subset H_phi
+rank(L_phi) = 1
+T_phi|L_phi = -1
+Q_phi(e,e) != 0 for any nonzero basis vector e of L_phi
+```
+
+The normalization of `Q_phi` may be `+1`, `-1`, or another declared nonzero scalar, but it must be fixed before evaluation.
+
+### 1.2 Active constraint data
+
+The gate-side package is:
+
+```text
+A = (
+  K_A,
+  V_A,
+  W_A,
+  Filt_A,
+  G_A,
+  rho_A,
+  gamma_A,
+  Q_A,
+  provenance_A
+)
+```
+
+where:
+
+- `K_A` is the active constraint complex;
+- `V_A` is the finite-dimensional active constraint vector space;
+- `W_A` is the codimension / activity filtration;
+- `Filt_A` records any additional operational filtration;
+- `G_A` is the declared compact connected Lie gate factor;
+- `rho_A: G_A -> GL(V_A)` is the active representation;
+- `gamma_A` is the ledgered gate loop or path;
+- `Q_A` is the active-side pairing;
+- `provenance_A` records code, matrix, convention, and hash data.
+
+For the gate-minimality theorem target, the spatial-triad component of `rho_A` must be a faithful orthogonal real 3-dimensional representation, and the active-set action must be non-abelian.
+
+## 2. Encoding map
+
+A polarization-ready bridge includes a linear map:
+
+```text
+E_phi: H_phi_bridge -> V_A
+```
+
+where `H_phi_bridge` is the declared bridge-relevant subspace of `H_phi`.
+
+Admissibility requires:
+
+1. `E_phi` is declared before monodromy or gate evaluation.
+2. `E_phi` is injective on `H_phi_bridge`.
+3. `E_phi` maps monodromy eigenspaces into the corresponding gate eigenspaces.
+4. `E_phi` respects declared filtrations.
+5. `E_phi` is ledgered as an input artifact with hash and convention data.
+
+For the `A1` bridge:
+
+```text
+E_phi: L_phi -> V_A
+E_phi(e) = v_minus
+rho_A(gamma_A)(v_minus) = -v_minus
+Q_A(v_minus, v_minus) = Q_phi(e,e)
+```
+
+The eigendirection `v_minus` must be selected before execution. Selecting the eigendirection after observing the `-1` eigenvalue is inadmissible.
+
+## 3. Transported pairing
+
+On the image of `E_phi`, define:
+
+```text
+Q_A(E_phi(u), E_phi(v)) := Q_phi(u,v)
+```
+
+This defines `Q_A` on `im(E_phi)`. If the active vector space contains additional directions, the extension of `Q_A` must be one of:
+
+1. orthogonal direct-sum extension;
+2. minimal nondegenerate extension preserving `W_A`;
+3. explicitly ledgered Gram-matrix extension.
+
+The extension rule is part of the artifact. An unledgered extension is not admissible.
+
+In matrix form, if `G_phi` is the Gram matrix of `Q_phi`, `G_active` is the Gram matrix of `Q_A`, and `E` is the matrix of `E_phi`, then polarization transport requires:
+
+```text
+E^T G_active E = G_phi
+```
+
+or the Hermitian variant:
+
+```text
+E^* G_active E = G_phi
+```
+
+when the chosen vector spaces are complex.
+
+## 4. Monodromy and gate compatibility
+
+Let `M_phi` be the matrix of source monodromy on `H_phi_bridge`. Let `M_A` be the matrix of the gate action `rho_A(gamma_A)` on `V_A`.
+
+The bridge is monodromy-compatible when:
+
+```text
+M_A E = E M_phi
+```
+
+Equivalently:
+
+```text
+commutator_error := ||M_A E - E M_phi|| <= tolerance
+```
+
+For the `A1` sign line, this reduces to:
+
+```text
+M_phi = [-1]
+M_A E(e) = -E(e)
+```
+
+This is necessary but not sufficient. Sign compatibility alone does not force `SO(3)` / `Spin(3)` because abelian targets such as `U(1)` can also display a sign. The gate-minimality theorem additionally uses spatial-triad faithfulness, non-abelian active-set action, compact-connected Lie regularity, and the polarization condition above.
+
+## 5. Pairing preservation
+
+A gate action is polarization-preserving when:
+
+```text
+rho_A(g)^T G_active rho_A(g) = G_active
+```
+
+for every admissible gate element `g` used by the bridge, or the Hermitian variant:
+
+```text
+rho_A(g)^* G_active rho_A(g) = G_active
+```
+
+For a ledgered loop `gamma_A`, the minimum replay condition is:
+
+```text
+pairing_preservation_error := ||M_A^T G_active M_A - G_active|| <= tolerance
+```
+
+or, in Hermitian form:
+
+```text
+pairing_preservation_error := ||M_A^* G_active M_A - G_active|| <= tolerance
+```
+
+## 6. Filtration preservation
+
+The bridge must preserve the declared filtration structure.
+
+Let:
+
+```text
+W_phi^i H_phi_bridge
+W_A^i V_A
+```
+
+be the source and active filtrations. Filtration compatibility requires:
+
+```text
+E_phi(W_phi^i H_phi_bridge) subset W_A^i V_A
+```
+
+for every declared level `i`, and:
+
+```text
+M_A(W_A^i) subset W_A^i
+```
+
+for the gate action used in the replay.
+
+The implementation report must make this machine-checkable by emitting basis indices or projection matrices for each filtration level.
+
+## 7. The A1 / Catalan specialization
+
+The first test instance is intentionally small.
+
+### Source side
+
+```text
+H_phi_bridge = L_phi
+basis = [e]
+M_phi = [-1]
+G_phi = [q]
+q != 0
+```
+
+### Active side
+
+```text
+V_A includes a declared direction v_minus
+E = column vector selecting v_minus
+M_A v_minus = -v_minus
+E^T G_active E = [q]
+```
+
+### Minimal checks
+
+```text
+source_pairing_nonzero == true
+E_declared_before_evaluation == true
+rank(E) == 1
+commutator_norm <= tolerance
+pairing_transport_error <= tolerance
+pairing_preservation_error <= tolerance
+filtration_preservation_report == pass
+```
+
+The expected theorem value of this specialization is narrow: it supports the gate-minimality proof note by preventing arbitrary sign-realizing representations from being substituted after the fact.
+
+## 8. Replay schema
+
+Every replay artifact claiming polarization compatibility must emit:
+
+```yaml
+artifact_id: string
+execution_status: doctrine_only | synthetic_fixture | runtime_executed | runtime_partial
+claim_id: A1-POLARIZATION-001
+source:
+  germ: A1
+  source_pairing_gram_matrix: matrix
+  monodromy_matrix_source: matrix
+  source_basis: list[string]
+  conventions_hash: string
+active:
+  active_constraint_pairing_gram_matrix: matrix
+  monodromy_matrix_gate: matrix
+  active_basis: list[string]
+  gate_group: string
+  gate_loop: string
+encoding:
+  E_phi_matrix: matrix
+  declared_before_evaluation: boolean
+filtration:
+  source_filtration: object
+  active_filtration: object
+  filtration_preservation_report: pass | fail
+checks:
+  source_pairing_nonzero: boolean
+  encoding_rank: integer
+  commutator_norm: number
+  pairing_transport_error: number
+  pairing_preservation_error: number
+  tolerance: number
+provenance:
+  repo: string
+  commit: string
+  input_hash_chain: list[string]
+  output_hash: string
+  generated_at: string
+```
+
+No paid runtime is required for this stage. A doctrine-only or synthetic-fixture artifact is valid if it accurately declares `execution_status` and does not pretend to be a runtime certificate.
+
+## 9. Pass / fail policy
+
+A replay passes A1 only if:
+
+```text
+source_pairing_nonzero == true
+E_declared_before_evaluation == true
+encoding_rank == dim(H_phi_bridge)
+commutator_norm <= tolerance
+pairing_transport_error <= tolerance
+pairing_preservation_error <= tolerance
+filtration_preservation_report == pass
+```
+
+A replay fails if any of the following occurs:
+
+- `E_phi` is selected after seeing the gate eigenspaces;
+- the source pairing is zero or undeclared;
+- the active pairing is extended without a rule;
+- sign compatibility is used as a substitute for polarization compatibility;
+- filtration data is omitted;
+- convention hashes are missing;
+- the artifact claims theorem status while only supplying a fixture.
+
+## 10. Relation to the gate-minimality theorem
+
+This note supplies the fifth condition in the gate-minimality theorem target.
+
+The theorem may cite this note as the definition of a polarization-compatible `A1` bridge. The theorem should still prove its own Lie-theoretic claims:
+
+1. faithful orthogonal triad action embeds the gate factor into `SO(3)`;
+2. connected proper compact subgroups relevant to the triad are circle-type and abelian;
+3. non-abelian active-set action forces full `SO(3)` image;
+4. the nontrivial loop lifts through `Spin(3)=SU(2)` to realize the half-integer sign;
+5. the sign direction is fixed by the transported pairing and encoding, not post-selected.
+
+## 11. Nonclaims
+
+This file does not claim:
+
+- P = NP;
+- P != NP;
+- NP != coNP;
+- a Boolean circuit lower bound;
+- a proof-system lower bound;
+- a GCT obstruction;
+- that every proof-character generating function admits a polarization-compatible singular-germ encoding;
+- that `SO(3)` is forced without the Lawful Learning spatial-triad and non-abelian active-set assumptions.
+
+It is a foundation note for Track A1 only.
