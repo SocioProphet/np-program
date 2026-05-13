@@ -8,6 +8,8 @@ This repository does **not** claim `P = NP`, `P != NP`, or a solution to any Cla
 
 The current framework claim is narrower and constructive: lawful mathematical artifacts can be studied through a singular-germ regime stack — exact closure, monodromy residue, renormalized finite defect, and Stokes / wall-crossing data — with explicit basis, provenance, and stage discipline.
 
+Current Clay proximity is intentionally conservative: **0-5%** until the program produces a concrete complexity-theoretic result rather than a morphology, analogy, roadmap, or gate-theoretic bridge.
+
 ## Current lanes
 
 1. **Doctrine.** Lawful Morphology Doctrine: the methodological constitution for proof, witness, agent-plan, hyperedge, attestation, and empirical-record morphologies.
@@ -19,23 +21,29 @@ The current framework claim is narrower and constructive: lawful mathematical ar
 7. **Scope control.** Singularity-class taxonomy restricting base claims to algebraic isolated singularities unless an extension is declared.
 8. **Barrier registry.** Relativization, natural proofs, algebrization, and program-specific analogs attached to every lower-bound-shaped claim.
 9. **Implementation target.** Catalan/square-root `mu_2` toy protocol: encode, ledger, recompute monodromy, verify Spin lift, and check committed Stokes normalization.
+10. **Clay-track governance.** A staged roadmap that starts with internal theorem hardening, then tests proof-complexity, GCT, and meta-complexity engagement surfaces with explicit go/no-go gates.
 
 ## Repository map
 
 ```text
 docs/
+  barriers/
+    README.md
   conventions/
     stokes.md
   doctrine/
     lawful-morphology-doctrine.md
+  foundations/
+    polarization.md
   research/
     proof-dynamics-bridge.md
     singular-germ-regime-decomposition.md
     gate-minimality-theorem-target.md
     polarization-compatibility.md
+  roadmap/
+    clay-track-program-structure.md
   scope/
     singularity-classes.md
-  barriers/
 specs/
   catalan-mu2-reference-implementation.md
 experiments/
@@ -64,9 +72,22 @@ Forbidden:
 - treating convention-dependent Stokes constants as intrinsic outside a committed normalization;
 - extending the Milnor-fiber argument beyond algebraic isolated singularities without declaring an extension theory.
 
+## Clay-track gates
+
+The Clay-track roadmap is intentionally staged.
+
+- **Gate 1, end Q2:** polarization formalization and gate-minimality proof note exist.
+- **Gate 2, end Q4:** at least one concrete Clay-adjacent surface is identified through proof complexity, GCT, or meta-complexity review.
+- **Gate 3, end Q6:** the selected Track C target has produced either a concrete partial result or a clearly stated obstruction.
+
+Failure at any gate is an admissible outcome. The fallback is to publish the internal framework and redirect effort to proof analysis, governance, search, and infrastructure rather than inflating Clay claims.
+
 ## Seed documents
 
 - [`docs/doctrine/lawful-morphology-doctrine.md`](docs/doctrine/lawful-morphology-doctrine.md)
+- [`docs/foundations/polarization.md`](docs/foundations/polarization.md)
+- [`docs/barriers/README.md`](docs/barriers/README.md)
+- [`docs/roadmap/clay-track-program-structure.md`](docs/roadmap/clay-track-program-structure.md)
 - [`docs/research/proof-dynamics-bridge.md`](docs/research/proof-dynamics-bridge.md)
 - [`docs/research/singular-germ-regime-decomposition.md`](docs/research/singular-germ-regime-decomposition.md)
 - [`docs/research/gate-minimality-theorem-target.md`](docs/research/gate-minimality-theorem-target.md)
