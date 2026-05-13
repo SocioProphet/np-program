@@ -1,0 +1,16 @@
+{
+  "schema_version": "singularity-scope/v0",
+  "artifact_id": "catalan-mu2-reference-v0",
+  "singularity_class": "algebraic_isolated_A1",
+  "local_coordinate": "t = 1 - 4x",
+  "is_isolated": true,
+  "is_algebraic": true,
+  "has_branching": true,
+  "has_log_terms": false,
+  "has_irregular_terms": false,
+  "monodromy_model": "sqrt(t) -> -sqrt(t); distinguished mu_2 sign line",
+  "stokes_model": "A1-sauzin-normalization-v0",
+  "finite_part_model": "regular analytic part after C_sing(t) = -2 sqrt(t)",
+  "scope_status": "base_scope",
+  "notes": "Catalan is the first base-scope A1 implementation target."
+}
