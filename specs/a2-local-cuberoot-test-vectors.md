@@ -253,6 +253,37 @@ character_basis_diag_tolerance: 1.0e-12
 
 This is the only valid no-mixing check in v0. The sheet basis is allowed to be cyclic-permutation, not diagonal.
 
+### 6.1 Reference implementation precision policy
+
+The reference harness must construct `F` from the exact closed-form DFT-of-3 matrix above. It must not construct `F` through floating-point eigendecomposition of `P`.
+
+The no-mixing residual:
+
+```text
+F^{-1} P F - diag(1, omega, omega2)
+```
+
+is a structural basis-change residual. It is independent of the sample radius `epsilon` and must not inherit tolerances from lateral-value checks at `1.0e-3`, `1.0e-6`, or `1.0e-9`.
+
+The reference implementation should report the policy explicitly:
+
+```yaml
+precision_policy:
+  omega_source: closed_form_-1/2_plus_minus_i_sqrt3_over_2
+  character_basis_F_source: closed_form_DFT3_from_spec
+  eigendecomposition_used: false
+  no_mixing_residual_epsilon_independent: true
+  no_mixing_tolerance_is_not_inherited_from_lateral_values: true
+```
+
+A stricter reference no-mixing tolerance is allowed and recommended:
+
+```yaml
+reference_character_basis_offdiag_tolerance: 1.0e-14
+```
+
+This keeps the no-mixing check a test of structural correctness rather than a mixed test of structural correctness and numerical conditioning.
+
 ## 7. Pairing fixture
 
 Use character basis `[v_0, v_1, v_2]` with pairing:
@@ -338,11 +369,19 @@ A fixture run passes Stage 1 iff:
 9. all residual norms are Q-independent.
 ```
 
+Reference implementations using the closed-form DFT-of-3 matrix should additionally satisfy:
+
+```text
+character-basis off-diagonal ratio <= 1.0e-14.
+```
+
 ## 10. Expected output skeleton
 
 ```yaml
 convention_id: A2-local-cuberoot-normalization-v0
 fixture_id: A2-LOCAL-CUBEROOT-TV-001
+test_vectors_id: sha256(specs/a2-local-cuberoot-test-vectors.md)
+harness_implementation_hash: git commit hash or source-file hash
 stage: "1"
 target: A2_local_cuberoot
 omega: {re: -0.5, im: 0.86602540378443864676}
@@ -367,9 +406,18 @@ residuals:
   character_basis_diag_max_error: number
   pairing_transport_error: number
   monodromy_compatibility_error: number
+precision_policy:
+  omega_source: closed_form_-1/2_plus_minus_i_sqrt3_over_2
+  character_basis_F_source: closed_form_DFT3_from_spec
+  eigendecomposition_used: false
+  no_mixing_residual_epsilon_independent: true
+  no_mixing_tolerance_is_not_inherited_from_lateral_values: true
 norm_policy: Q_independent
 pass: boolean
 provenance:
+  convention_id: A2-local-cuberoot-normalization-v0
+  test_vectors_id: sha256(specs/a2-local-cuberoot-test-vectors.md)
+  harness_implementation_hash: git commit hash or source-file hash
   convention_hash: string
   fixture_spec_hash: string
   harness_version: string
@@ -377,19 +425,32 @@ provenance:
   output_hash: string
 ```
 
+The triplet:
+
+```text
+convention_id
+test_vectors_id
+harness_implementation_hash
+```
+
+is mandatory. It anchors which convention was used, which fixture was run, and which implementation produced the receipt.
+
 ## 11. Stage-2 nonclaim
 
 Passing this fixture establishes only that the Candidate-A reference fixture for the pure local A2 cube-root model is implemented correctly.
 
+More mechanically: a passing Stage-1 run establishes that the Candidate-A readout contract is realizable on the bare local cube-root model with the fixture specified in `A2-local-cuberoot-normalization-v0` and the test vectors in `specs/a2-local-cuberoot-test-vectors.md`.
+
 It does not establish:
 
 ```text
-- uniqueness or naturality of this fixture;
-- A2 gate minimality;
-- a theorem-context attestation;
+- that this fixture is the canonical or unique natural choice for A2;
+- that the cube-root readout extends to A2 singularities appearing in larger algebraic-geometry contexts, including resolution settings or McKay correspondence with C3 subset SU(2) acting on C^2;
+- that the Candidate-A picture survives at higher An for n >= 3, where the natural finite group is C_(n+1) and cohomological structure may differ;
+- any I-12 template promotion;
 - a P vs NP result;
 - a Clay result;
 - anything about the order-3 Fuss-Catalan critical branch.
 ```
 
-Stage-2 promotion requires a separate theorem-context attestation predeclaring that this fixture is the intended `V_A^(2), Q_A^(2), E_phi^(2), M_phi^(2), M_A^(2)` data.
+Stage-2 attestation is required for the canonicity/naturality question and is out of scope for the Stage-1 harness.

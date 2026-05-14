@@ -22,8 +22,17 @@ jobs:
       - name: Emit Catalan mu2 reference ledger
         run: python experiments/catalan_mu2_reference.py > catalan-mu2-ledger.json
 
+      - name: Emit A2 local cube-root Stage-1 receipt
+        run: python experiments/a2_local_cuberoot_stage1.py > a2-local-cuberoot-stage1-receipt.json
+
       - name: Upload Catalan mu2 ledger
         uses: actions/upload-artifact@v4
         with:
           name: catalan-mu2-ledger
           path: catalan-mu2-ledger.json
+
+      - name: Upload A2 local cube-root Stage-1 receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: a2-local-cuberoot-stage1-receipt
+          path: a2-local-cuberoot-stage1-receipt.json
