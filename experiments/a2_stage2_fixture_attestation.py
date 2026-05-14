@@ -22,6 +22,7 @@ VERSION = "a2-stage2-fixture-attestation-v0"
 GENERATED_BY = "experiments.a2_stage2_fixture_attestation.build_receipt"
 DEFAULT_GENERATED_AT = "2026-05-14T00:00:00Z"
 REQUIRED_OBJECT_COUNT = 5
+Q_INDEPENDENT_POLICY = "Q_independent_max_entry_norm"
 
 SOURCE_BASIS = ["e_0", "e_1", "e_2"]
 ACTIVE_BASIS = ["v_0", "v_1", "v_2"]
@@ -83,7 +84,7 @@ def base_fixture() -> dict[str, Any]:
             "basis": list(ACTIVE_BASIS),
             "matrix": stage1.pairing_matrix_Q(),
             "rank": stage1.matrix_rank(stage1.pairing_matrix_Q()),
-            "residual_norm_policy": "Q_independent_max_entry_norm",
+            "residual_norm_policy": Q_INDEPENDENT_POLICY,
             "theorem_context_form_claimed": False,
         },
         "E_phi_2": {
@@ -130,6 +131,7 @@ def evaluate_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
     q_independent_residual = stage1.q_independent_max_entry_norm(pairing_delta, q_matrix)
     q_identity_residual = stage1.q_independent_max_entry_norm(pairing_delta, stage1.identity(3))
     intertwining_residual = stage1.q_independent_max_entry_norm(intertwining_delta, q_matrix)
+    residual_policy_is_q_independent = fixture["Q_A_2"]["residual_norm_policy"] == Q_INDEPENDENT_POLICY
 
     object_attestations = {
         "V_A_2": _status(
@@ -141,7 +143,7 @@ def evaluate_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
         "Q_A_2": _status(
             _matrix_equal(q_matrix, expected_q)
             and fixture["Q_A_2"]["rank"] == 3
-            and fixture["Q_A_2"]["residual_norm_policy"] == "Q_independent_max_entry_norm"
+            and residual_policy_is_q_independent
             and q_independent_residual <= stage1.SPEC_TOLERANCE
             and q_independent_residual == q_identity_residual
             and fixture["Q_A_2"]["theorem_context_form_claimed"] is False
@@ -173,7 +175,7 @@ def evaluate_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
 
     protocol_validity = {
         "closed_form_DFT3": _status(stage1.build_receipt()["precision_policy"]["eigendecomposition_used"] is False),
-        "Q_independent_residuals": _status(q_independent_residual == q_identity_residual),
+        "Q_independent_residuals": _status(residual_policy_is_q_independent and q_independent_residual == q_identity_residual),
         "transport_not_energy_functional": _status(fixture["E_phi_2"]["energy_functional_claimed"] is False),
     }
 
@@ -258,6 +260,10 @@ def mutated_receipt(mutation: str) -> dict[str, Any]:
         fixture["M_phi_2"]["matrix"] = stage1.identity(3)
     elif mutation == "gate_minimality_claim":
         fixture["M_A_2"]["gate_minimality_claimed"] = True
+    elif mutation == "q_dependent_residual_policy":
+        fixture["Q_A_2"]["residual_norm_policy"] = "Q_dependent_xQx"
+    elif mutation == "shape_correct_semantically_wrong":
+        fixture["M_phi_2"]["matrix"] = stage1.diag([1.0 + 0.0j, stage1.omega2(), stage1.omega()])
     else:
         raise ValueError(f"unknown mutation: {mutation}")
     return build_receipt(fixture)
