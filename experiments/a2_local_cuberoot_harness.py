@@ -67,6 +67,36 @@ def identity(n: int) -> list[list[complex]]:
     return [[1.0 + 0.0j if i == j else 0.0 + 0.0j for j in range(n)] for i in range(n)]
 
 
+def matrix_rank(matrix: list[list[complex]], tolerance: float = TOLERANCE) -> int:
+    """Compute numerical rank by row reduction without interpreting E_phi as an energy object."""
+    work = [row[:] for row in matrix]
+    if not work or not work[0]:
+        return 0
+
+    rows = len(work)
+    cols = len(work[0])
+    rank = 0
+
+    for col in range(cols):
+        pivot = max(range(rank, rows), key=lambda r: abs(work[r][col]))
+        if abs(work[pivot][col]) <= tolerance:
+            continue
+        work[rank], work[pivot] = work[pivot], work[rank]
+        pivot_value = work[rank][col]
+        work[rank] = [value / pivot_value for value in work[rank]]
+        for row in range(rows):
+            if row == rank:
+                continue
+            factor = work[row][col]
+            if abs(factor) > tolerance:
+                work[row] = [work[row][j] - factor * work[rank][j] for j in range(cols)]
+        rank += 1
+        if rank == rows:
+            break
+
+    return rank
+
+
 def matrix_to_json(matrix: list[list[complex]]) -> list[list[dict[str, float]]]:
     return [[cdict(value) for value in row] for row in matrix]
 
@@ -166,6 +196,8 @@ def compute_matrices(pairing_q: list[list[complex]] | None = None) -> dict[str, 
     pairing_residual = mat_sub(matmul(matmul(transpose(d_expected), q), d_expected), q)
 
     e_phi = identity(3)
+    e_phi_rank = matrix_rank(e_phi)
+    e_phi_nullity = len(e_phi[0]) - e_phi_rank
     m_phi = d_expected
     m_a = d_expected
     intertwining_residual = mat_sub(matmul(m_a, e_phi), matmul(e_phi, m_phi))
@@ -191,6 +223,8 @@ def compute_matrices(pairing_q: list[list[complex]] | None = None) -> dict[str, 
         "m_phi": m_phi,
         "m_a": m_a,
         "e_phi": e_phi,
+        "e_phi_rank": e_phi_rank,
+        "e_phi_nullity": e_phi_nullity,
         "eigenvalues_expected": eigenvalues_expected,
         "residuals": residuals,
         "d_residual": d_residual,
@@ -230,6 +264,11 @@ def compute_receipt(
         "monodromy_source_M_phi": matrix_to_json(matrices["m_phi"]),
         "monodromy_active_M_A": matrix_to_json(matrices["m_a"]),
         "encoding_E_phi": matrix_to_json(matrices["e_phi"]),
+        "transport_checks": {
+            "E_phi_expected_rank": 3,
+            "E_phi_rank": matrices["e_phi_rank"],
+            "E_phi_nullity": matrices["e_phi_nullity"],
+        },
         "residuals": residuals,
     }
 
@@ -277,8 +316,8 @@ def compute_receipt(
         "encoding_E_phi": matrix_to_json(matrices["e_phi"]),
         "transport_checks": {
             "E_phi_expected_rank": 3,
-            "E_phi_rank": 3,
-            "E_phi_nullity": 0,
+            "E_phi_rank": matrices["e_phi_rank"],
+            "E_phi_nullity": matrices["e_phi_nullity"],
         },
         "residuals": residuals,
         "norm_policy": "Q_independent",
