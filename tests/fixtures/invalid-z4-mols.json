@@ -1,0 +1,28 @@
+{
+  "fixture_id": "Z4-MOLS-INVALID-001",
+  "status": "invalid_rejection_fixture",
+  "claim_boundary": "negative fixture for cyclic order-four substitution; not a complexity-theoretic claim",
+  "structure": {
+    "name": "Z/4",
+    "elements": ["0", "1", "2", "3"],
+    "cayley_table_addition_mod_4": [
+      ["0", "1", "2", "3"],
+      ["1", "2", "3", "0"],
+      ["2", "3", "0", "1"],
+      ["3", "0", "1", "2"]
+    ]
+  },
+  "rejection_reason": {
+    "summary": "The cyclic order-four table is Latin but is not an admissible orthogonal mate for the readout-basis doctrine.",
+    "all_elements_self_inverse": false,
+    "has_order_four_element": true,
+    "cyclic_even_order_orthogonal_mate_available": false,
+    "required_structure": "V4 / additive GF(4), not cyclic Z/4"
+  },
+  "validator_expectation": {
+    "latin_table_check": "may_pass",
+    "orthogonal_mate_admissibility_check": "must_fail",
+    "readout_basis_guardrail_check": "must_fail_if_substituted_for_GF4"
+  },
+  "nonclaim": "This fixture only rejects a false algebraic substitution. It does not establish a lower bound or prove a Clay-relevant result."
+}
