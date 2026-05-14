@@ -2,13 +2,41 @@
 
 Status: **theorem-input foundation / Track A1 / not a Clay claim**.  
 Date: 2026-05-12.  
-Depends on: `docs/research/polarization-compatibility.md`, `docs/research/gate-minimality-theorem-target.md`, `specs/catalan-mu2-reference-implementation.md`, `docs/barriers/README.md`.
+Depends on: `docs/research/polarization-compatibility.md`, `docs/research/gate-minimality-theorem-target.md`, `docs/proofs/a1-gate-minimality-faithful.md`, `docs/proofs/T2_vs_T2_prime_interpretation.md`, `specs/catalan-mu2-reference-implementation.md`, `docs/barriers/README.md`.
 
 ## 0. Purpose
 
 This note supplies the formal foundation that the gate-minimality theorem needs. It upgrades polarization compatibility from a roadmap condition into a citeable definition package for the `A1` / Catalan / `mu2` bridge.
 
 It does not prove P vs NP, does not assert a Boolean lower bound, and does not claim that singular-germ invariants transfer to proof complexity. It only defines the source pairing, active-constraint pairing, encoding map, and preservation checks required before the `SO(3)` / `Spin(3)` gate-minimality target can be treated as mathematical rather than decorative.
+
+### 0.1 T2' design commitment
+
+This foundation now commits to the faithful-triad branch `T2'` as the default Track A1 interpretation.
+
+Under `T2'`:
+
+```text
+G = SO(3)
+rho_spatial: G -> SO(3) is faithful
+the -I lives in the auxiliary Spin(3)-structure on V_A, not in G
+```
+
+The central sign tested by the Catalan harness is therefore interpreted as:
+
+```text
+zeta = sigma(gamma_tilde(1)) = -I
+```
+
+where `gamma_tilde` is the lift of the distinguished generator of `pi_1(SO(3)) = Z/2` to the auxiliary `Spin(3)` frame and `sigma: Spin(3) -> SL(V_A)` is the spinor representation preserving `Q_A`.
+
+This does not invalidate the non-faithful `T2` branch. It fixes the default semantics for this foundation: spatial symmetry and auxiliary spin data are distinct structures. The non-faithful branch remains available only when a document explicitly declares that its minimal group is `G = SU(2)` and that the central `-I` is internal to `G`.
+
+### 0.2 Higher-Ak barrier
+
+The `A1` fact that `Spin(3)` is isomorphic to the universal cover of `SO(3)` is incidental. Under the faithful branch, the auxiliary group is data on `V_A`, not simply the universal cover of the spatial group. For `A_k` with `k > 1`, the auxiliary group must be re-derived from the relevant polarization space, pairing, and central monodromy structure.
+
+Any `A2` or higher extension that obtains its auxiliary group by mechanically taking a universal cover of the spatial symmetry group is out of scope until a separate theorem supplies the missing categorical setup.
 
 ## 1. Objects
 
@@ -78,12 +106,12 @@ where:
 - `W_A` is the codimension / activity filtration;
 - `Filt_A` records any additional operational filtration;
 - `G_A` is the declared compact connected Lie gate factor;
-- `rho_A: G_A -> GL(V_A)` is the active representation;
+- `rho_A` records the declared gate-side action; under `T2'`, its spatial component is faithful into `SO(3)` while the `V_A` action is mediated by the auxiliary `Spin(3)` structure;
 - `gamma_A` is the ledgered gate loop or path;
 - `Q_A` is the active-side pairing;
 - `provenance_A` records code, matrix, convention, and hash data.
 
-For the gate-minimality theorem target, the spatial-triad component of `rho_A` must be a faithful orthogonal real 3-dimensional representation, and the active-set action must be non-abelian.
+For the gate-minimality theorem target under `T2'`, the spatial-triad component must be a faithful orthogonal real 3-dimensional representation of `SO(3)`, and the active-set action must be non-abelian through the auxiliary spin structure.
 
 ## 2. Encoding map
 
@@ -108,7 +136,7 @@ For the `A1` bridge:
 ```text
 E_phi: L_phi -> V_A
 E_phi(e) = v_minus
-rho_A(gamma_A)(v_minus) = -v_minus
+sigma(gamma_tilde(1)) E_phi(e) = -E_phi(e)
 Q_A(v_minus, v_minus) = Q_phi(e,e)
 ```
 
@@ -146,7 +174,13 @@ when the chosen vector spaces are complex.
 
 ## 4. Monodromy and gate compatibility
 
-Let `M_phi` be the matrix of source monodromy on `H_phi_bridge`. Let `M_A` be the matrix of the gate action `rho_A(gamma_A)` on `V_A`.
+Let `M_phi` be the matrix of source monodromy on `H_phi_bridge`. Let `M_A` be the matrix induced on `V_A` by the auxiliary spin evaluation under the declared gate loop.
+
+Under `T2'`, the spatial group is `G = SO(3)`, but the concrete sign action on `V_A` is:
+
+```text
+M_A = sigma(gamma_tilde(1)).
+```
 
 The bridge is monodromy-compatible when:
 
@@ -164,23 +198,23 @@ For the `A1` sign line, this reduces to:
 
 ```text
 M_phi = [-1]
-M_A E(e) = -E(e)
+sigma(gamma_tilde(1)) E(e) = -E(e)
 ```
 
-This is necessary but not sufficient. Sign compatibility alone does not force `SO(3)` / `Spin(3)` because abelian targets such as `U(1)` can also display a sign. The gate-minimality theorem additionally uses spatial-triad faithfulness, non-abelian active-set action, compact-connected Lie regularity, and the polarization condition above.
+This is necessary but not sufficient. Sign compatibility alone does not force the faithful `SO(3)` / auxiliary `Spin(3)` structure because abelian or stray-sign targets can also display a sign. The gate-minimality theorem additionally uses spatial-triad faithfulness, non-abelian active-set action, compact-connected Lie regularity, coherent loop class, and the polarization condition above.
 
 ## 5. Pairing preservation
 
-A gate action is polarization-preserving when:
+Under `T2'`, pairing preservation is a property of the auxiliary spin representation:
 
 ```text
-rho_A(g)^T G_active rho_A(g) = G_active
+sigma(g)^T G_active sigma(g) = G_active
 ```
 
-for every admissible gate element `g` used by the bridge, or the Hermitian variant:
+for every admissible `g in Spin(3)` used by the bridge, or the Hermitian variant:
 
 ```text
-rho_A(g)^* G_active rho_A(g) = G_active
+sigma(g)^* G_active sigma(g) = G_active
 ```
 
 For a ledgered loop `gamma_A`, the minimum replay condition is:
@@ -218,7 +252,7 @@ for every declared level `i`, and:
 M_A(W_A^i) subset W_A^i
 ```
 
-for the gate action used in the replay.
+for the auxiliary spin action used in the replay.
 
 The implementation report must make this machine-checkable by emitting basis indices or projection matrices for each filtration level.
 
@@ -269,12 +303,14 @@ G_phi = [q]
 q != 0
 ```
 
-### Active side
+### Active side under T2'
 
 ```text
+G = SO(3)
+auxiliary group = Spin(3)
 V_A includes a declared direction v_minus
 E = column vector selecting v_minus
-M_A v_minus = -v_minus
+sigma(gamma_tilde(1)) v_minus = -v_minus
 E^T G_active E = [q]
 ```
 
@@ -300,6 +336,7 @@ Every replay artifact claiming polarization compatibility must emit:
 artifact_id: string
 execution_status: doctrine_only | synthetic_fixture | runtime_executed | runtime_partial
 claim_id: A1-POLARIZATION-001
+theorem_branch: T2_prime
 source:
   germ: A1
   source_pairing_gram_matrix: matrix
@@ -307,11 +344,12 @@ source:
   source_basis: list[string]
   conventions_hash: string
 active:
+  spatial_group: SO(3)
+  auxiliary_group: Spin(3)
   active_constraint_pairing_gram_matrix: matrix
-  monodromy_matrix_gate: matrix
+  auxiliary_spin_action_matrix: matrix
   active_basis: list[string]
-  gate_group: string
-  gate_loop: string
+  gate_loop: gamma in pi_1(SO(3))
 encoding:
   E_phi_matrix: matrix
   declared_before_evaluation: boolean
@@ -358,18 +396,19 @@ A replay fails if any of the following occurs:
 - sign compatibility is used as a substitute for polarization compatibility;
 - filtration data is omitted;
 - convention hashes are missing;
-- the artifact claims theorem status while only supplying a fixture.
+- the artifact claims theorem status while only supplying a fixture;
+- under `T2'`, `zeta = -I` is described as an element of `G = SO(3)` rather than as auxiliary spin data.
 
 ## 11. Relation to the gate-minimality theorem
 
-This note supplies the fifth condition in the gate-minimality theorem target.
+This note supplies the polarization condition in the gate-minimality theorem target.
 
-The theorem may cite this note as the definition of a polarization-compatible `A1` bridge. The theorem should still prove its own Lie-theoretic claims:
+The faithful theorem branch may cite this note as the definition of a polarization-compatible `A1` bridge. The theorem should still prove its own Lie-theoretic claims:
 
 1. faithful orthogonal triad action embeds the gate factor into `SO(3)`;
 2. connected proper compact subgroups relevant to the triad are circle-type and abelian;
 3. non-abelian active-set action forces full `SO(3)` image;
-4. the nontrivial loop lifts through `Spin(3)=SU(2)` to realize the half-integer sign;
+4. the nontrivial loop in `pi_1(SO(3))` lifts through the auxiliary `Spin(3)` frame to realize the half-integer sign;
 5. the sign direction is fixed by the transported pairing and encoding, not post-selected.
 
 ## 12. Barrier applicability design intent
@@ -431,6 +470,7 @@ This file does not claim:
 - a GCT obstruction;
 - that every proof-character generating function admits a polarization-compatible singular-germ encoding;
 - that `SO(3)` is forced without the Lawful Learning spatial-triad and non-abelian active-set assumptions;
+- that `Spin(3)` should be treated as the universal cover of the spatial group in higher `A_k` cases;
 - that Track A1 has cleared relativization, natural-proofs, algebrization, proof-complexity-transfer, or average-case/meta-complexity barriers.
 
 It is a foundation note for Track A1 only.
