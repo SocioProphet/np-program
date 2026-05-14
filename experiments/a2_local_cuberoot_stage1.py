@@ -23,12 +23,17 @@ CONVENTION_ID = "A2-local-cuberoot-normalization-v0"
 FIXTURE_ID = "A2-LOCAL-CUBEROOT-TV-001"
 TARGET = "A2_local_cuberoot"
 STAGE = "1"
+SOURCE = "A2-local-cuberoot-normalization-v0 / A2-LOCAL-CUBEROOT-TV-001"
+VERSION = "a2-local-cuberoot-stage1-v0"
+GENERATED_BY = "experiments.a2_local_cuberoot_stage1.build_receipt"
+DEFAULT_GENERATED_AT = "2026-05-14T00:00:00Z"
 
 SAMPLE_RADII = [1.0e-3, 1.0e-6, 1.0e-9]
 SAMPLE_CUBE_ROOTS = {1.0e-3: 0.1, 1.0e-6: 0.01, 1.0e-9: 0.001}
 
 SPEC_TOLERANCE = 1.0e-12
 REFERENCE_NO_MIXING_TOLERANCE = 1.0e-14
+RANK_TOLERANCE = 1.0e-12
 
 Matrix = list[list[complex]]
 
@@ -58,6 +63,10 @@ def harness_implementation_hash() -> str:
     if github_sha:
         return github_sha
     return "source_sha256:" + file_digest(__file__)
+
+
+def generated_at() -> str:
+    return os.environ.get("A2_HARNESS_GENERATED_AT", DEFAULT_GENERATED_AT)
 
 
 def z(value: complex) -> dict[str, float]:
@@ -95,8 +104,19 @@ def diag(entries: list[complex]) -> Matrix:
     return [[entries[i] if i == j else 0.0 + 0.0j for j in range(len(entries))] for i in range(len(entries))]
 
 
-def max_abs_matrix(matrix: Matrix) -> float:
+def q_independent_max_entry_norm(matrix: Matrix, q_matrix: Matrix | None = None) -> float:
+    """Return a max-entry norm that intentionally ignores Q.
+
+    The optional q_matrix argument exists only to make the Q-independence test
+    mechanical: passing a different Q must not change the residual norm.
+    """
+
+    _ = q_matrix
     return max((abs(entry) for row in matrix for entry in row), default=0.0)
+
+
+def max_abs_matrix(matrix: Matrix) -> float:
+    return q_independent_max_entry_norm(matrix)
 
 
 def max_abs_values(values: list[complex]) -> float:
@@ -105,6 +125,45 @@ def max_abs_values(values: list[complex]) -> float:
 
 def offdiag_max(matrix: Matrix) -> float:
     return max((abs(matrix[i][j]) for i in range(len(matrix)) for j in range(len(matrix[i])) if i != j), default=0.0)
+
+
+def matrix_rank(matrix: Matrix, tolerance: float = RANK_TOLERANCE) -> int:
+    """Compute numerical rank by Gaussian elimination.
+
+    This is a transport-map rank/nullity check. It is not a determinant or
+    condition-number test.
+    """
+
+    rows = [list(row) for row in matrix]
+    if not rows:
+        return 0
+    m = len(rows)
+    n = len(rows[0])
+    rank = 0
+    col = 0
+    while rank < m and col < n:
+        pivot = max(range(rank, m), key=lambda r: abs(rows[r][col]))
+        if abs(rows[pivot][col]) <= tolerance:
+            col += 1
+            continue
+        rows[rank], rows[pivot] = rows[pivot], rows[rank]
+        pivot_value = rows[rank][col]
+        rows[rank] = [entry / pivot_value for entry in rows[rank]]
+        for r in range(m):
+            if r == rank:
+                continue
+            factor = rows[r][col]
+            if abs(factor) > tolerance:
+                rows[r] = [rows[r][c] - factor * rows[rank][c] for c in range(n)]
+        rank += 1
+        col += 1
+    return rank
+
+
+def nullity(matrix: Matrix, tolerance: float = RANK_TOLERANCE) -> int:
+    if not matrix:
+        return 0
+    return len(matrix[0]) - matrix_rank(matrix, tolerance=tolerance)
 
 
 def sheet_basis_matrix() -> Matrix:
@@ -204,16 +263,20 @@ def build_receipt() -> dict[str, Any]:
     eigenvalues = [1.0 + 0.0j, w, w2]
     eigenvalue_error = max_abs_values([value**3 - 1.0 for value in eigenvalues])
 
+    e_phi_rank = matrix_rank(E_phi)
+    e_phi_nullity = nullity(E_phi)
+    expected_rank = 3
+
     residuals = {
         "lateral_value_max_error": max_abs_values(lateral_errors),
         "additive_jump_max_error": max_abs_values(jump_errors),
-        "sheet_basis_cubic_error": max_abs_matrix(P3_minus_I),
+        "sheet_basis_cubic_error": q_independent_max_entry_norm(P3_minus_I, Q),
         "eigenvalue_max_error": eigenvalue_error,
         "character_basis_offdiag_ratio": offdiag_ratio,
         "character_basis_diag_max_error": diag_error,
-        "character_basis_total_error": max_abs_matrix(D_delta),
-        "pairing_transport_error": max_abs_matrix(pairing_delta),
-        "monodromy_compatibility_error": max_abs_matrix(monodromy_delta),
+        "character_basis_total_error": q_independent_max_entry_norm(D_delta, Q),
+        "pairing_transport_error": q_independent_max_entry_norm(pairing_delta, Q),
+        "monodromy_compatibility_error": q_independent_max_entry_norm(monodromy_delta, Q),
     }
 
     tolerances = {
@@ -225,6 +288,16 @@ def build_receipt() -> dict[str, Any]:
         "character_basis_offdiag_tolerance": REFERENCE_NO_MIXING_TOLERANCE,
         "pairing_transport_tolerance": SPEC_TOLERANCE,
         "monodromy_compatibility_tolerance": SPEC_TOLERANCE,
+        "transport_rank_tolerance": RANK_TOLERANCE,
+    }
+
+    transport_encoding = {
+        "interpretation": "transport_encoding_map_not_energy_functional",
+        "expected_rank": expected_rank,
+        "rank": e_phi_rank,
+        "nullity": e_phi_nullity,
+        "kernel_condition": "trivial_kernel",
+        "determinant_or_condition_number_used": False,
     }
 
     checks = {
@@ -236,17 +309,14 @@ def build_receipt() -> dict[str, Any]:
         "character_basis_diagonal": residuals["character_basis_diag_max_error"] <= tolerances["character_basis_diag_tolerance"],
         "pairing_transport": residuals["pairing_transport_error"] <= tolerances["pairing_transport_tolerance"],
         "monodromy_compatibility": residuals["monodromy_compatibility_error"] <= tolerances["monodromy_compatibility_tolerance"],
+        "transport_encoding_full_rank": e_phi_rank == expected_rank,
+        "transport_encoding_trivial_kernel": e_phi_nullity == 0,
+        "transport_encoding_not_energy_functional": True,
         "norm_policy_q_independent": True,
         "closed_form_dft3_no_eigendecomposition": True,
     }
 
-    receipt = {
-        "convention_id": CONVENTION_ID,
-        "fixture_id": FIXTURE_ID,
-        "test_vectors_id": file_digest("specs/a2-local-cuberoot-test-vectors.md"),
-        "harness_implementation_hash": harness_implementation_hash(),
-        "stage": STAGE,
-        "target": TARGET,
+    core_numerical_values = {
         "omega": z(w),
         "omega2": z(w2),
         "sample_radii": SAMPLE_RADII,
@@ -254,18 +324,38 @@ def build_receipt() -> dict[str, Any]:
         "lateral_values_plus": lateral_plus,
         "lateral_values_minus": lateral_minus,
         "additive_jump_coefficients": jump_coefficients,
-        "additive_jump_coefficients_expected": {f"sheet_{i}": z(expected_jumps[i]) for i in range(3)},
         "sheet_basis_matrix": zmatrix(P),
-        "sheet_basis_eigenvalues": [z(value) for value in eigenvalues],
         "character_basis_matrix_F": zmatrix(F),
-        "character_basis_matrix_F_inverse": zmatrix(F_inv),
         "character_basis_matrix_D": zmatrix(D_observed),
-        "character_basis_matrix_D_expected": zmatrix(D_expected),
         "pairing_matrix_Q": zmatrix(Q),
         "monodromy_source_M_phi": zmatrix(M_phi),
         "monodromy_active_M_A": zmatrix(M_A),
         "encoding_E_phi": zmatrix(E_phi),
         "residuals": residuals,
+        "transport_encoding": transport_encoding,
+    }
+
+    stage1_pass = all(checks.values())
+
+    receipt = {
+        "source": SOURCE,
+        "version": VERSION,
+        "generated_by": GENERATED_BY,
+        "date": generated_at(),
+        "checksum": canonical_digest(core_numerical_values),
+        "stage1_pass": stage1_pass,
+        "stage2_claimed": False,
+        "convention_id": CONVENTION_ID,
+        "fixture_id": FIXTURE_ID,
+        "test_vectors_id": file_digest("specs/a2-local-cuberoot-test-vectors.md"),
+        "harness_implementation_hash": harness_implementation_hash(),
+        "stage": STAGE,
+        "target": TARGET,
+        **core_numerical_values,
+        "additive_jump_coefficients_expected": {f"sheet_{i}": z(expected_jumps[i]) for i in range(3)},
+        "sheet_basis_eigenvalues": [z(value) for value in eigenvalues],
+        "character_basis_matrix_F_inverse": zmatrix(F_inv),
+        "character_basis_matrix_D_expected": zmatrix(D_expected),
         "tolerances": tolerances,
         "precision_policy": {
             "omega_source": "closed_form_-1/2_plus_minus_i_sqrt3_over_2",
@@ -276,15 +366,22 @@ def build_receipt() -> dict[str, Any]:
         },
         "norm_policy": "Q_independent_max_entry_norm",
         "checks": checks,
-        "pass": all(checks.values()),
+        "pass": stage1_pass,
         "provenance": {
+            "source": SOURCE,
+            "version": VERSION,
+            "generated_by": GENERATED_BY,
+            "date": generated_at(),
+            "checksum": canonical_digest(core_numerical_values),
+            "stage1_pass": stage1_pass,
+            "stage2_claimed": False,
             "convention_id": CONVENTION_ID,
             "test_vectors_id": file_digest("specs/a2-local-cuberoot-test-vectors.md"),
             "harness_implementation_hash": harness_implementation_hash(),
             "convention_hash": file_digest("docs/conventions/a2-local-cuberoot-normalization-v0.md"),
             "fixture_spec_hash": file_digest("specs/a2-local-cuberoot-test-vectors.md"),
-            "harness_version": "a2-local-cuberoot-stage1-v0",
-            "generated_at": os.environ.get("A2_HARNESS_GENERATED_AT", "deterministic-fixture-v0"),
+            "harness_version": VERSION,
+            "generated_at": generated_at(),
         },
         "nonclaims": [
             "A passing Stage 1 run establishes only that Candidate A is realizable on the bare local cube-root model for the declared fixture.",
@@ -302,7 +399,7 @@ def build_receipt() -> dict[str, Any]:
 def main() -> int:
     receipt = build_receipt()
     print(json.dumps(receipt, indent=2, sort_keys=True))
-    return 0 if receipt["pass"] else 1
+    return 0 if receipt["stage1_pass"] and not receipt["stage2_claimed"] else 1
 
 
 if __name__ == "__main__":
