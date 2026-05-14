@@ -16,7 +16,7 @@ Current Clay proximity is intentionally conservative: **0-5%** until the program
 2. **Singular geometry.** Singular germs as the unifying home for scale, phase, finite-part, and wall-crossing data.
 3. **Proof dynamics.** Conditional bridge from proof-character generating functions to monodromy/Floquet signatures, with the `p = 2` obstruction as first implementation target.
 4. **Gate minimality.** Theorem target for making the `SO(3)` / `Spin(3)` gate realization canonical in the half-integer case.
-5. **Polarization compatibility.** The load-bearing condition tying the singular-germ pairing to the active constraint complex.
+5. **Polarization compatibility.** The load-bearing condition tying the singular-germ pairing to the active constraint complex, with an A2 specialization for the Hermitian+volume rung.
 6. **Empirical observables.** Proof-character and certificate-discovery generating functions over declared corpora, augmented with Stokes / chamber signatures.
 7. **Scope control.** Singularity-class taxonomy restricting base claims to algebraic isolated singularities unless an extension is declared.
 8. **Barrier registry.** Relativization, natural proofs, algebrization, and program-specific analogs attached to every lower-bound-shaped claim.
@@ -40,6 +40,7 @@ docs/
     singular-germ-regime-decomposition.md
     gate-minimality-theorem-target.md
     polarization-compatibility.md
+    polarization-compatibility-A2.md
   roadmap/
     clay-track-program-structure.md
   scope/
@@ -92,6 +93,7 @@ Failure at any gate is an admissible outcome. The fallback is to publish the int
 - [`docs/research/singular-germ-regime-decomposition.md`](docs/research/singular-germ-regime-decomposition.md)
 - [`docs/research/gate-minimality-theorem-target.md`](docs/research/gate-minimality-theorem-target.md)
 - [`docs/research/polarization-compatibility.md`](docs/research/polarization-compatibility.md)
+- [`docs/research/polarization-compatibility-A2.md`](docs/research/polarization-compatibility-A2.md)
 - [`docs/conventions/stokes.md`](docs/conventions/stokes.md)
 - [`docs/scope/singularity-classes.md`](docs/scope/singularity-classes.md)
 - [`specs/catalan-mu2-reference-implementation.md`](specs/catalan-mu2-reference-implementation.md)
