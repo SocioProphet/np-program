@@ -368,3 +368,29 @@ notes: >
 references:
   - docs/research/gate-minimality-theorem-target.md
 ```
+
+### MU2-READOUT-BASIS-001
+
+```yaml
+claim_id: MU2-READOUT-BASIS-001
+claim_type: barrier
+basis: Catalan mu_2 monodromy fixture and Track A readout-basis search
+stage: candidate_found
+barriers:
+  relativization: unknown
+  natural_proofs: unknown
+  algebrization: unknown
+  proof_complexity_transfer: unknown
+  average_case_transfer: not_applicable
+notes: >
+  The Catalan mu_2 fixture detects a Z/2 sign-line involution. It does not identify
+  which Z/2 factor inside a possible V4 = Z/2 x Z/2 structure is active, and it
+  does not supply the full GF(4)-MOLS readout-basis structure. Selectivity remains
+  the hard step: the readout basis must be declared and justified before any lower-bound
+  interpretation. This entry references the canonical cross-repo pattern and does
+  not duplicate it locally.
+references:
+  - SocioProphet/systems-learning-loops/kb/patterns/coordinate-basis-vs-readout-basis-involution.md
+  - docs/foundations/coordinate-readout-involution-reference.md
+  - specs/catalan-mu2-reference-implementation.md
+```
