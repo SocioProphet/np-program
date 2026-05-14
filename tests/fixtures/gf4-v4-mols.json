@@ -1,0 +1,61 @@
+{
+  "fixture_id": "GF4-V4-MOLS-VALID-001",
+  "status": "valid_witness",
+  "claim_boundary": "finite algebraic fixture; not a complexity-theoretic claim",
+  "field": {
+    "name": "GF(4)",
+    "presentation": "F2[a]/(a^2 + a + 1)",
+    "elements": ["0", "1", "a", "a+1"],
+    "addition": {
+      "0": {"0": "0", "1": "1", "a": "a", "a+1": "a+1"},
+      "1": {"0": "1", "1": "0", "a": "a+1", "a+1": "a"},
+      "a": {"0": "a", "1": "a+1", "a": "0", "a+1": "1"},
+      "a+1": {"0": "a+1", "1": "a", "a": "1", "a+1": "0"}
+    },
+    "multiplication": {
+      "0": {"0": "0", "1": "0", "a": "0", "a+1": "0"},
+      "1": {"0": "0", "1": "1", "a": "a", "a+1": "a+1"},
+      "a": {"0": "0", "1": "a", "a": "a+1", "a+1": "1"},
+      "a+1": {"0": "0", "1": "a+1", "a": "1", "a+1": "a"}
+    }
+  },
+  "latin_squares": {
+    "L_1": {
+      "definition": "L_1(x,y) = x + y",
+      "rows_x": ["0", "1", "a", "a+1"],
+      "cols_y": ["0", "1", "a", "a+1"],
+      "table": [
+        ["0", "1", "a", "a+1"],
+        ["1", "0", "a+1", "a"],
+        ["a", "a+1", "0", "1"],
+        ["a+1", "a", "1", "0"]
+      ]
+    },
+    "L_a": {
+      "definition": "L_a(x,y) = a*x + y",
+      "rows_x": ["0", "1", "a", "a+1"],
+      "cols_y": ["0", "1", "a", "a+1"],
+      "table": [
+        ["0", "1", "a", "a+1"],
+        ["a", "a+1", "0", "1"],
+        ["a+1", "a", "1", "0"],
+        ["1", "0", "a+1", "a"]
+      ]
+    }
+  },
+  "orthogonality_check": {
+    "expected_distinct_ordered_pairs": 16,
+    "observed_ordered_pairs": [
+      ["0", "0"], ["1", "1"], ["a", "a"], ["a+1", "a+1"],
+      ["1", "a"], ["0", "a+1"], ["a+1", "0"], ["a", "1"],
+      ["a", "a+1"], ["a+1", "a"], ["0", "1"], ["1", "0"],
+      ["a+1", "1"], ["a", "0"], ["1", "a+1"], ["0", "a"]
+    ],
+    "result": "pass"
+  },
+  "readout_basis_guardrail": {
+    "mu2_fixture_detects_single_channel": true,
+    "full_v4_channel_identification_required_for_a2_a3": true,
+    "z4_substitution_allowed": false
+  }
+}
