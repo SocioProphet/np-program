@@ -1,5 +1,6 @@
 import unittest
 
+from experiments import a2_f5_vacuity_report as f5
 from experiments import a2_stage2_fixture_attestation as stage2
 
 
@@ -78,6 +79,32 @@ class A2Stage2FixtureAttestationTest(unittest.TestCase):
         receipt = stage2.mutated_receipt("gate_minimality_claim")
         self.assertFalse(receipt["stage2_pass"])
         self.assertEqual(receipt["object_attestations"]["M_A_2"], "fail")
+
+    def test_q_dependent_policy_fails_protocol(self):
+        receipt = stage2.mutated_receipt("q_dependent_residual_policy")
+        self.assertFalse(receipt["stage2_pass"])
+        self.assertEqual(receipt["object_attestations"]["Q_A_2"], "fail")
+        self.assertEqual(receipt["protocol_validity"]["Q_independent_residuals"], "fail")
+
+    def test_shape_correct_semantically_wrong_fixture_fails(self):
+        receipt = stage2.mutated_receipt("shape_correct_semantically_wrong")
+        self.assertFalse(receipt["stage2_pass"])
+        self.assertEqual(receipt["object_attestations"]["M_phi_2"], "fail")
+        self.assertEqual(receipt["object_attestations"]["E_phi_2"], "fail")
+        self.assertEqual(receipt["object_attestations"]["M_A_2"], "fail")
+
+    def test_f5_report_covers_required_vacuity_classes(self):
+        report = f5.build_report()
+        self.assertEqual(report["classification"], "no_vacuity_detected_within_tested_classes")
+        self.assertEqual(set(report["tested_vacuity_classes"]), {
+            "V1_trivial_pass",
+            "V2_input_independence",
+            "V3_type_correct_semantic_vacuity",
+        })
+        self.assertEqual(report["case_count"], 11)
+        self.assertTrue(all(result["failed_for_expected_reason"] for result in report["case_results"]), report)
+        self.assertTrue(all(not result["stage2_pass"] for result in report["case_results"]), report)
+        self.assertTrue(all(not result["theorem_context_claimed"] for result in report["case_results"]), report)
 
     def test_forbidden_theorem_phrases_absent(self):
         receipt_text = str(stage2.build_receipt()).lower()
