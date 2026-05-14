@@ -385,7 +385,7 @@ def build_receipt() -> dict[str, Any]:
         },
         "nonclaims": [
             "A passing Stage 1 run establishes only that Candidate A is realizable on the bare local cube-root model for the declared fixture.",
-            "It does not establish that the fixture is canonical or uniquely natural for A2.",
+            "Canonicity and unique naturality for A2 remain out of scope for this Stage 1 receipt.",
             "It does not establish extension to larger A2 algebraic-geometry contexts, including resolution settings or McKay C3 subset SU(2) contexts.",
             "It does not establish survival at higher An for n >= 3.",
             "It does not promote any I-12 template.",
