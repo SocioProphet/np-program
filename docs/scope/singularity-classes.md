@@ -68,8 +68,50 @@ C(x)=\frac{1-\sqrt{1-4x}}{2x}
 
 has an isolated algebraic square-root singularity at `x = 1/4`. It is therefore base-scope and is the correct first implementation target for the `mu_2` bridge.
 
-## 6. Primary risk
+## 6. A1 gate-minimality scope declaration
+
+Any document invoking `A_1` gate minimality must declare which theorem branch it uses.
+
+The default branch for faithful triad semantics is now:
+
+```text
+T2' / faithful triad action:
+G = SO(3)
+central sign location = auxiliary Spin(3)-structure on V_A
+proof reference = docs/proofs/a1-gate-minimality-faithful.md
+```
+
+Under this branch, the central element `-I` is not an element of `G`. It is the endpoint of the lifted nontrivial loop in the auxiliary `Spin(3)` frame, evaluated through the spinor representation:
+
+```text
+zeta = sigma(gamma_tilde(1)) = -I.
+```
+
+Documents relying on the non-faithful branch must instead declare:
+
+```text
+T2 / non-faithful triad action:
+G = SU(2)
+central sign location = central element of G
+proof reference = docs/proofs/a1-gate-minimality.md
+```
+
+Documents that are version-agnostic must declare which shared fragment they use, such as abstract `Z/2` monodromy, symplectic preservation on `V_A`, or the Catalan square-root branch convention.
+
+## 7. Higher-Ak auxiliary-structure barrier
+
+The faithful branch deliberately separates spatial symmetry from auxiliary spin data. This prevents a false generalization.
+
+For `A_1`, the auxiliary `Spin(3)` structure happens to be isomorphic to the universal cover of `SO(3)`. That coincidence is not part of the general theorem template.
+
+For `A_k` with `k > 1`, the auxiliary group must be derived from the relevant polarization space, form, and central monodromy structure. It must not be obtained by blindly taking a universal cover of the spatial symmetry group.
+
+This is a scope barrier for `A_2` and beyond.
+
+## 8. Primary risk
 
 The main risk is that future proof-class generating functions will not be algebraic. If they are D-finite, irregular, transcendental, or natural-boundary objects, the framework must switch from Milnor-fiber-first analysis to Stokes/resurgence-first or another declared local/global analytic framework.
 
-This risk is tracked as a scope condition, not as a refutation of the base theory.
+A second risk is branch ambiguity in gate-minimality semantics. A document that uses `zeta = -I` without declaring whether the sign is internal to `G` (`T2`) or auxiliary to `G` (`T2'`) is under-specified and cannot be promoted past candidate stage.
+
+These risks are tracked as scope conditions, not as refutations of the base theory.
