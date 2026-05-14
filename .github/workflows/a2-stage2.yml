@@ -1,0 +1,23 @@
+name: A2 Stage2
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  a2-stage2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run tests
+        run: python -m unittest discover -s tests -p 'test_*.py'
+      - name: Emit A2 Stage-2 fixture receipt
+        run: python experiments/a2_stage2_fixture_attestation.py > a2-stage2-fixture-attestation-receipt.json
+      - name: Upload A2 Stage-2 fixture receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: a2-stage2-fixture-attestation-receipt
+          path: a2-stage2-fixture-attestation-receipt.json
