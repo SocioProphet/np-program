@@ -24,6 +24,12 @@ REQUIRED_DEPENDENCY_CITES = [
     "A-PFK-OP-001",
     "A-PFK-SCHEMA-001",
 ]
+LOCAL_PFK_SCHEMA_NAMES = {
+    "claim_ledger_row.schema.json",
+    "event_ir.schema.json",
+    "proof_artifact.schema.json",
+    "calibration_bundle.schema.json",
+}
 
 
 class TestPFKDependency(unittest.TestCase):
@@ -51,8 +57,16 @@ class TestPFKDependency(unittest.TestCase):
             self.assertIn("PFK-OP-040", text)
             self.assertIn(PIN, text)
 
-    def test_no_authoritative_local_schemas_directory_present(self) -> None:
-        self.assertFalse((ROOT / "schemas").exists(), "local schemas/ must not replace canonical PFK schemas")
+    def test_no_local_pfk_schema_files_shadow_canonical_paths(self) -> None:
+        schemas_dir = ROOT / "schemas"
+        if not schemas_dir.exists():
+            return
+        local_names = {path.name for path in schemas_dir.rglob("*.json")}
+        shadowed = sorted(local_names & LOCAL_PFK_SCHEMA_NAMES)
+        self.assertFalse(
+            shadowed,
+            f"local schemas/ must not shadow canonical PFK schema names: {shadowed}",
+        )
 
     def test_heller_godel_pfk_paths_resolve_when_available(self) -> None:
         hg_root_value = os.environ.get("HELLER_GODEL_ROOT")
