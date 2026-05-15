@@ -48,7 +48,24 @@ specs/
   catalan-mu2-reference-implementation.md
 experiments/
 ledgers/
+  catalan_mu2/
+DEPENDENCIES.md
 ```
+
+## Schemas and operational substrate
+
+PFK schemas and the operator catalog are canonically hosted in `SocioProphet/Heller-Godel/proof_fabric_kernel/`. This repository consumes them at the pin declared in `DEPENDENCIES.md`.
+
+No local `schemas/` directory is authoritative. If local schema copies appear in the future, they must be treated as generated caches or removed in favor of canonical PFK paths.
+
+## Framework dependency
+
+This repository depends on `SocioProphet/Heller-Godel @ 988307215ad38ccb16514311222184a1b757752b` for:
+
+- framework objects (`HG-*`): foundational vocabulary, Universal Bridge, Catalan / mu2 fixture;
+- PFK operational substrate (`PFK-*`): schemas, operator catalog, statistics protocol, and anti-seed register.
+
+See `DEPENDENCIES.md` for the full citation surface.
 
 ## Claim discipline
 
@@ -84,6 +101,7 @@ Failure at any gate is an admissible outcome. The fallback is to publish the int
 
 ## Seed documents
 
+- [`DEPENDENCIES.md`](DEPENDENCIES.md)
 - [`docs/doctrine/lawful-morphology-doctrine.md`](docs/doctrine/lawful-morphology-doctrine.md)
 - [`docs/foundations/polarization.md`](docs/foundations/polarization.md)
 - [`docs/barriers/README.md`](docs/barriers/README.md)
