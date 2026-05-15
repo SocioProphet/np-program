@@ -6,6 +6,24 @@ This spec defines the first concrete test case for the singular-germ regime fram
 
 The default theorem interpretation is now the faithful-triad branch `T2'`: `G = SO(3)` acts faithfully on the spatial triad, while the concrete `-I` sign lives in the auxiliary `Spin(3)`-structure on `V_A`. The numerical fixture is unchanged; the interpretation of the `zeta = -I` witness is sharpened.
 
+## Canonical framework and PFK citations
+
+This spec consumes the canonical Heller-Godel / PFK surface at:
+
+```text
+SocioProphet/Heller-Godel @ 988307215ad38ccb16514311222184a1b757752b
+```
+
+Primary citations:
+
+- `[HG-EX-001 @ 988307215ad38ccb16514311222184a1b757752b]` — Catalan / mu_2 canonical fixture.
+- `[HG-MTH-005 @ 988307215ad38ccb16514311222184a1b757752b]` — Universal Bridge formal specification, method-grade only.
+- `[PFK-OP-040 @ 988307215ad38ccb16514311222184a1b757752b]` — Catalan / mu_2 fixture operator.
+- `[PFK-SCHEMA-001 @ 988307215ad38ccb16514311222184a1b757752b]` — claim-ledger row schema.
+- `[PFK-SCHEMA-002 @ 988307215ad38ccb16514311222184a1b757752b]` — Event-IR schema.
+- `[A-PFK-OP-001 @ 988307215ad38ccb16514311222184a1b757752b]` — operator invocation is not evidence.
+- `[A-PFK-SCHEMA-001 @ 988307215ad38ccb16514311222184a1b757752b]` — schema validity is not content validity.
+
 ## 1. Purpose
 
 A run claiming to encode the Catalan species must produce enough ledgered data to recompute:
@@ -32,6 +50,8 @@ C(x) = 2 - 2\sqrt{t} + O(t)
 ```
 
 The local branch datum is therefore `A_1` / two-sheeted. The distinguished monodromy around `t = 0` sends `sqrt(t)` to `-sqrt(t)`.
+
+This fixture is canonically referenced as `[HG-EX-001 @ 988307215ad38ccb16514311222184a1b757752b]`. The np-program operational form invokes `[PFK-OP-040 @ 988307215ad38ccb16514311222184a1b757752b]`.
 
 ## 3. Required ledger artifacts
 
@@ -64,6 +84,8 @@ For `T2'`, the ledger must state:
 theorem_branch = T2_prime
 zeta_interpretation = auxiliary_spin_structure_on_V_A
 ```
+
+When emitted as a PFK claim-ledger artifact, the row must validate against `[PFK-SCHEMA-001 @ 988307215ad38ccb16514311222184a1b757752b]` and carry fixture-grade claim discipline.
 
 ## 4. Pass condition 1: coefficient enumeration
 
@@ -196,3 +218,25 @@ The first CI target should implement deterministic checks:
 Passing this test does not prove P vs NP, validate Lawful Learning, or establish the full bridge. It shows that one forced singular-germ instance can be transported through the declared morphology pipeline without losing its `mu_2` sign or its declared `A_1` wall-crossing signature.
 
 Under `T2'`, passing this test does not show that `-I` is an element of `G = SO(3)`. It shows that the nontrivial `SO(3)` loop has the declared auxiliary `Spin(3)` endpoint on `V_A`.
+
+## 11. Boundary
+
+This reference implementation is fixture-grade per the framework boundary represented by `A-MTH-003` and the PFK boundary represented by `[A-PFK-OP-001 @ 988307215ad38ccb16514311222184a1b757752b]`.
+
+Computing the Catalan / mu_2 fixture's character data does not:
+
+- constitute progress on P vs NP;
+- transfer the Universal Bridge methodology into proof-grade content in the NP domain;
+- promote the np-program's Clay proximity above the declared 0-5%;
+- turn schema-valid ledger output into mathematical correctness.
+
+The reference implementation is an apparatus-validation tool: it demonstrates that the np-program apparatus can correctly produce the Catalan fixture signature under the committed convention. That is its full claim.
+
+## 12. Empirical-protocol scope
+
+If the reference implementation is run as part of a larger empirical study, that study must comply with `[PFK-OP-050 @ 988307215ad38ccb16514311222184a1b757752b]` and the PFK protocol anti-seeds:
+
+- `[A-PFK-PROTOCOL-001 @ 988307215ad38ccb16514311222184a1b757752b]` — null-test passage is not theorem-grade;
+- `[A-PFK-PROTOCOL-002 @ 988307215ad38ccb16514311222184a1b757752b]` — window-shopping prevention.
+
+A single invocation against the Catalan fixture is fixture-grade calibration only. Multi-window or multi-perturbation extensions must comply with the protocol or remain explicitly fixture-grade.
