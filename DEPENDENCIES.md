@@ -4,7 +4,7 @@
 
 | Repository | Commit SHA | Cited content |
 |---|---|---|
-| `SocioProphet/Heller-Godel` | `988307215ad38ccb16514311222184a1b757752b` | Framework objects (`HG-*`) from `docs/framework-core/`; PFK operational substrate from `proof_fabric_kernel/` |
+| `SocioProphet/Heller-Godel` | `b1502373532ca1b782aafd451ecb98dfacd067b8` | Framework objects (`HG-*`) from `docs/framework-core/`; PFK operational substrate from `proof_fabric_kernel/` |
 
 ## Cited objects
 
@@ -14,7 +14,8 @@
 |---|---|---|
 | `HG-FND-*` | Foundational vocabulary | typing for lawful-morphology doctrine, polarization, singular-germ regime decomposition |
 | `HG-EX-001` | Catalan / mu_2 fixture | replaces self-anchored Catalan / mu_2 work in `ledgers/catalan_mu2/` and `specs/catalan-mu2-reference-implementation.md` |
-| `HG-MTH-005` | Universal Bridge formal specification | cited as conceptual scaffold for cross-Clay claim-discipline pattern; does not transfer proofs |
+| `HG-MTH-005` | Universal Bridge formal specification | parent / general bridge axiom; does not transfer proofs |
+| `HG-MTH-008` | Universal Bridge: P vs NP / complexity domain extension | canonical NP bridge spec; np-program is the primary consumer |
 
 ### PFK operational substrate (canonical IDs)
 
@@ -52,25 +53,36 @@
 | `A-PFK-SCHEMA-002` | schema-version drift; this pin is not floating |
 | `A-PFK-VAL-001` | validator green status is not audit completion |
 
+### Framework anti-seed
+
+| Identifier | Applies to np-program because |
+|---|---|
+| `A-HG-MTH-001` | Universal Bridge does not transfer proofs |
+| `A-HG-MTH-002` | Catalan / mu_2 fixture is not Clay progress |
+| `A-HG-MTH-003` | fixture-grade and theorem-grade citations must not be mixed |
+| `A-HG-MTH-005` | triple barrier diagnosis is not a circumvention recipe |
+
 ## Citation form
 
 ```text
-[HG-MTH-005 @ 988307215ad38ccb16514311222184a1b757752b]
-[PFK-OP-040 @ 988307215ad38ccb16514311222184a1b757752b]
-[PFK-SCHEMA-001 @ 988307215ad38ccb16514311222184a1b757752b]
-[A-PFK-OP-001 @ 988307215ad38ccb16514311222184a1b757752b]
+[HG-MTH-005 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
+[HG-MTH-008 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
+[PFK-OP-040 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
+[PFK-SCHEMA-001 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
+[A-HG-MTH-005 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
+[A-PFK-OP-001 @ b1502373532ca1b782aafd451ecb98dfacd067b8]
 ```
 
-The commit SHA is the merged Heller-Godel registry-expansion commit. Pinning is required; floating `main` references are forbidden per `A-PFK-SCHEMA-002`.
+The commit SHA is the merged Heller-Godel HG-MTH-008 commit. Pinning is required; floating `main` references are forbidden per `A-PFK-SCHEMA-002`.
 
 ## Forbidden edges
 
 - `np-program` -> any other Clay-program repo (no horizontal dependencies)
 - `np-program` -> Heller-Godel-other-than-pinned-commit (no floating references)
-- `np-program` -> automorphic / number-theoretic methodology from RH or Hodge programs except through the Universal Bridge method-grade analogy (`HG-MTH-005`)
+- `np-program` -> automorphic / number-theoretic methodology from RH or Hodge programs except through the Universal Bridge method-grade analogy (`HG-MTH-005`, `HG-MTH-008`)
 - `np-program` -> proof-character generating-function results as if they were complexity-theoretic results
 
-## Scope discipline (unchanged by this migration)
+## Scope discipline (unchanged by this pin advance)
 
 Permitted:
 
@@ -90,24 +102,23 @@ Forbidden:
 - reporting empirical solver performance without input distribution and tranche;
 - treating cryptographic hardness as metaphysical;
 - treating convention-dependent Stokes constants as intrinsic outside a committed normalization;
-- extending the Milnor-fiber argument beyond algebraic isolated singularities without declaring an extension theory.
+- extending the Milnor-fiber argument beyond algebraic isolated singularities without declaring an extension theory;
+- claiming any lane circumvents relativization, natural-proofs, or algebrization by citing `HG-MTH-008`.
 
 Clay proximity remains 0-5%.
 
-## What this migration does not do
+## What this pin advance does not do
 
 - Does not change the 10-lane structure.
 - Does not change the Q2/Q4/Q6 gate schedule.
-- Does not change the barrier registry.
+- Does not change the np-program's own barrier registry.
 - Does not promote any claim grade.
 - Does not constitute progress on P vs NP, proof complexity, GCT, or meta-complexity.
-- Does not import new mathematical content.
+- Does not emit receipts or alter apparatus.
 
 ## Schema source
 
 PFK schemas live canonically at `SocioProphet/Heller-Godel/proof_fabric_kernel/schemas/` as of the pinned commit. This repository consumes schemas from `HELLER_GODEL_ROOT/proof_fabric_kernel/schemas/` in CI where needed.
-
-No local `schemas/` directory was present on `main` during this migration. If one is introduced later, it must be justified as a generated cache or removed in favor of canonical PFK paths.
 
 ## Schema-version pinning policy
 
