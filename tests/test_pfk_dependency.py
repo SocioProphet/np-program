@@ -5,7 +5,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PIN = "988307215ad38ccb16514311222184a1b757752b"
+PIN = "b1502373532ca1b782aafd451ecb98dfacd067b8"
 REQUIRED_PFK_PATHS = [
     "proof_fabric_kernel/docs/OperatorCatalog_PrimePolicyOperators_v1.md",
     "proof_fabric_kernel/docs/SchemaCatalog_v1.md",
@@ -18,9 +18,11 @@ REQUIRED_PFK_PATHS = [
 REQUIRED_DEPENDENCY_CITES = [
     "HG-EX-001",
     "HG-MTH-005",
+    "HG-MTH-008",
     "PFK-OP-040",
     "PFK-SCHEMA-001",
     "PFK-SCHEMA-002",
+    "A-HG-MTH-005",
     "A-PFK-OP-001",
     "A-PFK-SCHEMA-001",
 ]
@@ -33,7 +35,7 @@ LOCAL_PFK_SCHEMA_NAMES = {
 
 
 class TestPFKDependency(unittest.TestCase):
-    def test_dependencies_pin_is_exact_heller_godel_registry_expansion_commit(self) -> None:
+    def test_dependencies_pin_is_exact_heller_godel_hg_mth_008_commit(self) -> None:
         text = (ROOT / "DEPENDENCIES.md").read_text(encoding="utf-8")
         self.assertIn(PIN, text)
         self.assertNotIn("current `main`", text.lower())
@@ -43,7 +45,6 @@ class TestPFKDependency(unittest.TestCase):
     def test_readme_declares_canonical_pfk_dependency(self) -> None:
         text = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("SocioProphet/Heller-Godel", text)
-        self.assertIn(PIN, text)
         self.assertIn("proof_fabric_kernel", text)
 
     def test_catalan_spec_and_ledger_use_canonical_citations(self) -> None:
@@ -55,7 +56,12 @@ class TestPFKDependency(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             self.assertIn("HG-EX-001", text)
             self.assertIn("PFK-OP-040", text)
-            self.assertIn(PIN, text)
+
+    def test_np_bridge_anchor_uses_hg_mth_008(self) -> None:
+        text = (ROOT / "docs" / "scope" / "np-bridge-citation.md").read_text(encoding="utf-8")
+        self.assertIn("HG-MTH-008", text)
+        self.assertIn("A-HG-MTH-005", text)
+        self.assertIn(PIN, text)
 
     def test_no_local_pfk_schema_files_shadow_canonical_paths(self) -> None:
         schemas_dir = ROOT / "schemas"
@@ -80,6 +86,7 @@ class TestPFKDependency(unittest.TestCase):
         citation_pattern = re.compile(r"\[[A-Z0-9\-]+ @ [0-9a-f]{40}\]")
         docs = [
             ROOT / "DEPENDENCIES.md",
+            ROOT / "docs" / "scope" / "np-bridge-citation.md",
             ROOT / "specs/catalan-mu2-reference-implementation.md",
             ROOT / "ledgers/catalan_mu2/README.md",
         ]
